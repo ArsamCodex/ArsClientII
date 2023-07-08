@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArsClientII", "ArsClientII\ArsClientII.csproj", "{1ABA2EE5-108E-4EFD-96BF-333AF18FB380}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1ABA2EE5-108E-4EFD-96BF-333AF18FB380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ABA2EE5-108E-4EFD-96BF-333AF18FB380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ABA2EE5-108E-4EFD-96BF-333AF18FB380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ABA2EE5-108E-4EFD-96BF-333AF18FB380}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {57A9D0B2-78BD-4575-ADB3-FE031BA1CDB3}
+	EndGlobalSection
+EndGlobal
