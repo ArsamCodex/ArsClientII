@@ -9,6 +9,10 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Speech.Recognition;
+using System.Media;
+using Microsoft.VisualBasic.ApplicationServices;
+using NAudio.Wave;
 
 namespace ArsClientII
 {
@@ -21,13 +25,30 @@ namespace ArsClientII
         Color colorDecrease = Color.Red;
         decimal previousPrice;
         private readonly ApplicationDbContext _context;
+   
 
+        private static SpeechRecognitionEngine recognizer;
+        private static WaveOutEvent waveOutEvent;
         public Form1()
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
         }
+       
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            recognizer.Dispose();
+        }
 
+      
+        public void StopListening()
+        {
+            if (recognizer != null)
+            {
+                recognizer.Dispose();
+                Console.WriteLine("Speech recognition stopped.");
+            }
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             Shutdown();
@@ -369,6 +390,59 @@ namespace ArsClientII
 
             return float.NaN; // Return NaN if temperature retrieval fails
         }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+            StartListening();
+            richTextBox1.AppendText("Start Listenong wait 2 second");
+        }
+        public static void StartListening()
+        {
+            recognizer = new SpeechRecognitionEngine();
+            recognizer.LoadGrammar(new Grammar(new GrammarBuilder("long live the king")));
+            recognizer.SpeechRecognized += Recognizer_SpeechRecognized;
+            recognizer.SetInputToDefaultAudioDevice();
+            recognizer.RecognizeAsync(RecognizeMode.Multiple);
+
+            Console.WriteLine("Listening for commands. Say 'Nakhla' to start Mehrdad hidden song");
+        }
+        private static async void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            if (e.Result.Text.Equals("long live the king", StringComparison.OrdinalIgnoreCase))
+            {
+                string musicFilePath = "C:\\Users\\Armin\\Desktop\\AudioDownloaded/MehrdadHidden-Nakhla.mp3";
+                await PlayMusicAsync(musicFilePath);
+            }
+        }
+        public static async Task PlayMusicAsync(string filePath)
+        {
+            try
+            {
+                using (var audioFileReader = new AudioFileReader(filePath))
+                {
+                    waveOutEvent = new WaveOutEvent();
+                    waveOutEvent.Init(audioFileReader);
+                    waveOutEvent.Play();
+
+                    Console.WriteLine("Playing music: " + filePath);
+                    Console.WriteLine("Press any key to stop playback.");
+                    Console.ReadKey();
+
+                    waveOutEvent.Stop();
+                    waveOutEvent.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while playing the music: " + ex.Message);
+            }
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
+        }
+        
+
     }
     public class CoinGeckoResponse
     {

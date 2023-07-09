@@ -30,6 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            button10 = new Button();
+            label10 = new Label();
+            label9 = new Label();
             button4 = new Button();
             checkBox1 = new CheckBox();
             richTextBox1 = new RichTextBox();
@@ -53,11 +56,9 @@
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
+            tabPage3 = new TabPage();
             errorProvider1 = new ErrorProvider(components);
             button8 = new Button();
-            label9 = new Label();
-            label10 = new Label();
-            button10 = new Button();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -78,6 +79,34 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Information";
+            // 
+            // button10
+            // 
+            button10.Location = new Point(10, 136);
+            button10.Name = "button10";
+            button10.Size = new Size(87, 23);
+            button10.TabIndex = 7;
+            button10.Text = "Cpu Data";
+            button10.UseVisualStyleBackColor = true;
+            button10.Click += button10_Click;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(102, 108);
+            label10.Name = "label10";
+            label10.Size = new Size(49, 15);
+            label10.TabIndex = 6;
+            label10.Text = "              ";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(13, 111);
+            label9.Name = "label9";
+            label9.Size = new Size(55, 15);
+            label9.TabIndex = 5;
+            label9.Text = "CPU Tem";
             // 
             // button4
             // 
@@ -140,6 +169,7 @@
             // 
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(tabPage3);
             tabControl1.Location = new Point(259, 22);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -310,6 +340,17 @@
             label3.TabIndex = 0;
             label3.Text = "BTC";
             // 
+            // tabPage3
+            // 
+            tabPage3.Location = new Point(4, 24);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(308, 248);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "Vocie";
+            tabPage3.UseVisualStyleBackColor = true;
+            tabPage3.Click += tabPage3_Click;
+            // 
             // errorProvider1
             // 
             errorProvider1.ContainerControl = this;
@@ -323,34 +364,6 @@
             button8.Text = "Get Data";
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(13, 111);
-            label9.Name = "label9";
-            label9.Size = new Size(55, 15);
-            label9.TabIndex = 5;
-            label9.Text = "CPU Tem";
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(102, 108);
-            label10.Name = "label10";
-            label10.Size = new Size(49, 15);
-            label10.TabIndex = 6;
-            label10.Text = "              ";
-            // 
-            // button10
-            // 
-            button10.Location = new Point(10, 136);
-            button10.Name = "button10";
-            button10.Size = new Size(87, 23);
-            button10.TabIndex = 7;
-            button10.Text = "Cpu Data";
-            button10.UseVisualStyleBackColor = true;
-            button10.Click += button10_Click;
             // 
             // Form1
             // 
@@ -366,6 +379,7 @@
             Controls.Add(groupBox1);
             Name = "Form1";
             Text = "Form1";
+            Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             tabControl1.ResumeLayout(false);
@@ -408,5 +422,6 @@
         private Button button10;
         private Label label10;
         private Label label9;
+        private TabPage tabPage3;
     }
 }
