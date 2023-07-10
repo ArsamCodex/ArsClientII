@@ -25,7 +25,7 @@ namespace ArsClientII
         Color colorDecrease = Color.Red;
         decimal previousPrice;
         private readonly ApplicationDbContext _context;
-   
+
 
         private static SpeechRecognitionEngine recognizer;
         private static WaveOutEvent waveOutEvent;
@@ -34,13 +34,13 @@ namespace ArsClientII
             InitializeComponent();
             _context = new ApplicationDbContext();
         }
-       
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             recognizer.Dispose();
         }
 
-      
+
         public void StopListening()
         {
             if (recognizer != null)
@@ -399,7 +399,7 @@ namespace ArsClientII
         public static void StartListening()
         {
             recognizer = new SpeechRecognitionEngine();
-            recognizer.LoadGrammar(new Grammar(new GrammarBuilder("long live the king")));
+            recognizer.LoadGrammar(new Grammar(new GrammarBuilder("zirenakhla")));
             recognizer.SpeechRecognized += Recognizer_SpeechRecognized;
             recognizer.SetInputToDefaultAudioDevice();
             recognizer.RecognizeAsync(RecognizeMode.Multiple);
@@ -408,7 +408,7 @@ namespace ArsClientII
         }
         private static async void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            if (e.Result.Text.Equals("long live the king", StringComparison.OrdinalIgnoreCase))
+            if (e.Result.Text.Equals("zirenakhla", StringComparison.OrdinalIgnoreCase))
             {
                 string musicFilePath = "C:\\Users\\Armin\\Desktop\\AudioDownloaded/MehrdadHidden-Nakhla.mp3";
                 await PlayMusicAsync(musicFilePath);
@@ -439,10 +439,47 @@ namespace ArsClientII
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-        }
-        
 
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            var MyData = _context.Information
+                .Where(c => c.InformationID == 2);
+            foreach (var x in MyData)
+            {
+                textBox3.Text = x.InformationID.ToString();
+                textBox4.Text = x.ShutDownCount.ToString();
+                textBox5.Text = x.RestartCount.ToString();
+
+            }
+            richTextBox1.AppendText("Operatio  nDone");
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            var MyData = new Information();
+            MyData.RestartCount = textBox4.Text;
+            MyData.ShutDownCount = textBox5.Text;
+            _context.Information.Add(MyData);
+            _context.SaveChanges();
+        }
     }
     public class CoinGeckoResponse
     {

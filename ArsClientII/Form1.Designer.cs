@@ -57,12 +57,23 @@
             label4 = new Label();
             label3 = new Label();
             tabPage3 = new TabPage();
+            tabPage4 = new TabPage();
+            button11 = new Button();
+            textBox5 = new TextBox();
+            textBox4 = new TextBox();
+            textBox3 = new TextBox();
+            label14 = new Label();
+            label13 = new Label();
+            label12 = new Label();
+            label11 = new Label();
             errorProvider1 = new ErrorProvider(components);
             button8 = new Button();
+            button12 = new Button();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
+            tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -170,6 +181,7 @@
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPage4);
             tabControl1.Location = new Point(259, 22);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -197,9 +209,9 @@
             // 
             // button9
             // 
-            button9.Location = new Point(15, 185);
+            button9.Location = new Point(10, 177);
             button9.Name = "button9";
-            button9.Size = new Size(287, 23);
+            button9.Size = new Size(292, 23);
             button9.TabIndex = 7;
             button9.Text = "Disk";
             button9.UseVisualStyleBackColor = true;
@@ -207,9 +219,9 @@
             // 
             // button7
             // 
-            button7.Location = new Point(12, 150);
+            button7.Location = new Point(10, 148);
             button7.Name = "button7";
-            button7.Size = new Size(290, 23);
+            button7.Size = new Size(292, 23);
             button7.TabIndex = 6;
             button7.Text = "Text Checker";
             button7.UseVisualStyleBackColor = true;
@@ -240,18 +252,18 @@
             label2.AutoSize = true;
             label2.Location = new Point(6, 58);
             label2.Name = "label2";
-            label2.Size = new Size(34, 15);
+            label2.Size = new Size(49, 15);
             label2.TabIndex = 3;
-            label2.Text = "Save:";
+            label2.Text = "Save (P)";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(3, 23);
             label1.Name = "label1";
-            label1.Size = new Size(67, 15);
+            label1.Size = new Size(50, 15);
             label1.TabIndex = 2;
-            label1.Text = "FIle To Dow";
+            label1.Text = "Path (D)";
             // 
             // textBox2
             // 
@@ -351,6 +363,95 @@
             tabPage3.UseVisualStyleBackColor = true;
             tabPage3.Click += tabPage3_Click;
             // 
+            // tabPage4
+            // 
+            tabPage4.Controls.Add(button12);
+            tabPage4.Controls.Add(button11);
+            tabPage4.Controls.Add(textBox5);
+            tabPage4.Controls.Add(textBox4);
+            tabPage4.Controls.Add(textBox3);
+            tabPage4.Controls.Add(label14);
+            tabPage4.Controls.Add(label13);
+            tabPage4.Controls.Add(label12);
+            tabPage4.Controls.Add(label11);
+            tabPage4.Location = new Point(4, 24);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new Padding(3);
+            tabPage4.Size = new Size(308, 248);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "Data";
+            tabPage4.UseVisualStyleBackColor = true;
+            tabPage4.Click += tabPage4_Click;
+            // 
+            // button11
+            // 
+            button11.Location = new Point(43, 167);
+            button11.Name = "button11";
+            button11.Size = new Size(75, 23);
+            button11.TabIndex = 7;
+            button11.Text = "GetData";
+            button11.UseVisualStyleBackColor = true;
+            button11.Click += button11_Click;
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(167, 107);
+            textBox5.Name = "textBox5";
+            textBox5.Size = new Size(135, 23);
+            textBox5.TabIndex = 6;
+            // 
+            // textBox4
+            // 
+            textBox4.Location = new Point(168, 79);
+            textBox4.Name = "textBox4";
+            textBox4.Size = new Size(134, 23);
+            textBox4.TabIndex = 5;
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(168, 45);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(134, 23);
+            textBox3.TabIndex = 4;
+            textBox3.TextChanged += textBox3_TextChanged;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(30, 110);
+            label14.Name = "label14";
+            label14.Size = new Size(82, 15);
+            label14.TabIndex = 3;
+            label14.Text = "Restart Count ";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(30, 79);
+            label13.Name = "label13";
+            label13.Size = new Size(95, 15);
+            label13.TabIndex = 2;
+            label13.Text = "ShutDownCount";
+            label13.Click += label13_Click;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(29, 48);
+            label12.Name = "label12";
+            label12.Size = new Size(18, 15);
+            label12.TabIndex = 1;
+            label12.Text = "ID";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(67, 6);
+            label11.Name = "label11";
+            label11.Size = new Size(115, 15);
+            label11.TabIndex = 0;
+            label11.Text = "Dtabase Information";
+            // 
             // errorProvider1
             // 
             errorProvider1.ContainerControl = this;
@@ -364,6 +465,16 @@
             button8.Text = "Get Data";
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
+            // 
+            // button12
+            // 
+            button12.Location = new Point(168, 167);
+            button12.Name = "button12";
+            button12.Size = new Size(102, 23);
+            button12.TabIndex = 8;
+            button12.Text = "EDIt";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
             // 
             // Form1
             // 
@@ -387,6 +498,8 @@
             tabPage1.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            tabPage4.ResumeLayout(false);
+            tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
         }
@@ -423,5 +536,15 @@
         private Label label10;
         private Label label9;
         private TabPage tabPage3;
+        private TabPage tabPage4;
+        private Label label11;
+        private Label label13;
+        private Label label12;
+        private Button button11;
+        private TextBox textBox5;
+        private TextBox textBox4;
+        private TextBox textBox3;
+        private Label label14;
+        private Button button12;
     }
 }
