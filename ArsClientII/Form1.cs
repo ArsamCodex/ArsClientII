@@ -387,7 +387,7 @@ namespace ArsClientII
             recognizer.SetInputToDefaultAudioDevice();
 
             // Define grammar choices
-            var choices = new Choices("Arsam", "Mehrdad", "Tupac", "Stop", "Vigen", "clean", "Armin", "pedarsag", "hey");
+            var choices = new Choices("Arsam", "Mehrdad", "Tupac", "Stop", "Vigen", "cleaning", "Armin", "pedarsag", "big dady");
 
             // Create a grammar from the choices
             var grammar = new Grammar(new GrammarBuilder(choices));
@@ -413,13 +413,7 @@ namespace ArsClientII
                         {
                             StopMusic();
                         }
-                        if (e.Result.Text.ToLower() == "pedarsag")
-                        {
-                            var cpuTemperature = await GetCpuTemperature();
-                            var x = cpuTemperature.ToString();
-
-                            richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}");
-                        }
+                      
 
                         else
                         {
@@ -429,16 +423,19 @@ namespace ArsClientII
                     }
                     else
                     {
-                        if (e.Result.Text.ToLower() == "stop")
-                        {
-                            // Console.WriteLine("No music is currently playing.");
-                            richTextBox1.AppendText($"No Misu Ava");
-                        }
-                        if (e.Result.Text.ToLower() == "hey")
+                       
+                        if (e.Result.Text.ToLower() == "cleaning")
                         {
                             await CleanUpPrefetch(path);
 
                             richTextBox1.AppendText("TamizKari Done");
+                        }
+                        if (e.Result.Text.ToLower() == "pedarsag")
+                        {
+                            var cpuTemperature = await GetCpuTemperature();
+                            var x = cpuTemperature.ToString();
+
+                            richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}");
                         }
                         else
                         {
@@ -604,7 +601,7 @@ namespace ArsClientII
         {
 
         }
-        public async void RemoveAllFilesInDirectory(string path)
+        public  void RemoveAllFilesInDirectory(string path)
 
         {
             // List<string> FailedfILEToDelete = new List<string>();
