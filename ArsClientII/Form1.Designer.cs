@@ -58,6 +58,7 @@
             label3 = new Label();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            button12 = new Button();
             button11 = new Button();
             textBox5 = new TextBox();
             textBox4 = new TextBox();
@@ -68,7 +69,6 @@
             label11 = new Label();
             errorProvider1 = new ErrorProvider(components);
             button8 = new Button();
-            button12 = new Button();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -145,6 +145,7 @@
             richTextBox1.Size = new Size(188, 286);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // button1
             // 
@@ -383,6 +384,16 @@
             tabPage4.UseVisualStyleBackColor = true;
             tabPage4.Click += tabPage4_Click;
             // 
+            // button12
+            // 
+            button12.Location = new Point(168, 167);
+            button12.Name = "button12";
+            button12.Size = new Size(102, 23);
+            button12.TabIndex = 8;
+            button12.Text = "EDIt";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
+            // 
             // button11
             // 
             button11.Location = new Point(43, 167);
@@ -465,16 +476,6 @@
             button8.Text = "Get Data";
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
-            // 
-            // button12
-            // 
-            button12.Location = new Point(168, 167);
-            button12.Name = "button12";
-            button12.Size = new Size(102, 23);
-            button12.TabIndex = 8;
-            button12.Text = "EDIt";
-            button12.UseVisualStyleBackColor = true;
-            button12.Click += button12_Click;
             // 
             // Form1
             // 

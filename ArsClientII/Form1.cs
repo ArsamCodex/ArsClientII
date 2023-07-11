@@ -25,30 +25,19 @@ namespace ArsClientII
         Color colorDecrease = Color.Red;
         decimal previousPrice;
         private readonly ApplicationDbContext _context;
+        private static bool isPlaying = false;
 
 
-        private static SpeechRecognitionEngine recognizer;
         private static WaveOutEvent waveOutEvent;
+        SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
+
         public Form1()
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            recognizer.Dispose();
-        }
-
-
-        public void StopListening()
-        {
-            if (recognizer != null)
-            {
-                recognizer.Dispose();
-                Console.WriteLine("Speech recognition stopped.");
-            }
-        }
+        
         private void button3_Click(object sender, EventArgs e)
         {
             Shutdown();
@@ -393,28 +382,103 @@ namespace ArsClientII
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
-            StartListening();
+            
+                // Set the input language to English
+                recognizer.SetInputToDefaultAudioDevice();
+
+                // Define grammar choices
+                var choices = new Choices("Arsam", "Mehrdad", "Tupac", "Stop", "Vigen");
+
+                // Create a grammar from the choices
+                var grammar = new Grammar(new GrammarBuilder(choices));
+
+                // Load the grammar
+                recognizer.LoadGrammar(grammar);
+
+                recognizer.RecognizeAsync(RecognizeMode.Multiple);
+
+                //Console.WriteLine("Speak something...");
+                richTextBox1.AppendText("Say Somethign ");
+
+                // Handle speech recognition events
+                recognizer.SpeechRecognized += async (sender, e) =>
+                {
+                    if (e.Result.Confidence >= 0.7) // Adjust confidence threshold as needed
+                    {
+                        // Console.WriteLine("You said: " + e.Result.Text);
+                        richTextBox1.AppendText($"You Text IS {e.Result.Text}  ");
+                        if (isPlaying)
+                        {
+                            if (e.Result.Text.ToLower() == "stop")
+                            {
+                                StopMusic();
+                            }
+                            else
+                            {
+                                //  Console.WriteLine("Music is currently playing. Please wait until it finishes.");
+                                richTextBox1.AppendText($"Music is currently playing. Please wait until it finishes");
+                            }
+                        }
+                        else
+                        {
+                            if (e.Result.Text.ToLower() == "stop")
+                            {
+                                // Console.WriteLine("No music is currently playing.");
+                                richTextBox1.AppendText($"No Misu Ava");
+                            }
+                            else
+                            {
+                                await PlaySong(e.Result.Text);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Console.WriteLine("Sorry, I couldn't understand your speech.");
+                        richTextBox1.AppendText($"Change Your accennt");
+                    }
+                };
+
+                // Wait for user input to exit the program
+                Console.WriteLine("Press any key to exit...");
+                richTextBox1.AppendText("Any ket to exit");
+                richTextBox1.AppendText("Any ket to exit");
+                //Console.ReadKey();
+            
             richTextBox1.AppendText("Start Listenong wait 2 second");
         }
-        public static void StartListening()
-        {
-            recognizer = new SpeechRecognitionEngine();
-            recognizer.LoadGrammar(new Grammar(new GrammarBuilder("zirenakhla")));
-            recognizer.SpeechRecognized += Recognizer_SpeechRecognized;
-            recognizer.SetInputToDefaultAudioDevice();
-            recognizer.RecognizeAsync(RecognizeMode.Multiple);
+      
 
-            Console.WriteLine("Listening for commands. Say 'Nakhla' to start Mehrdad hidden song");
-        }
-        private static async void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        /* private  async void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+         {
+             if (e.Result.Text.Equals("zirenakhla", StringComparison.OrdinalIgnoreCase))
+             {
+                 string musicFilePath = "C:\\Users\\Armin\\Desktop\\AudioDownloaded/MehrdadHidden-Nakhla.mp3";
+                 await PlayMusicAsync(musicFilePath);
+             }
+         }*/
+        public async Task PlaySong(string option)
         {
-            if (e.Result.Text.Equals("zirenakhla", StringComparison.OrdinalIgnoreCase))
+            switch (option)
             {
-                string musicFilePath = "C:\\Users\\Armin\\Desktop\\AudioDownloaded/MehrdadHidden-Nakhla.mp3";
-                await PlayMusicAsync(musicFilePath);
+                case "Tupac":
+                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\AllEyesonme.mp3");
+                    break;
+                case "Mehrdad":
+                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\MehrdadHidden-Nakhla.mp3");
+                    break;
+                case "Arsam":
+                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\balance.mp3");
+                    break;
+                case "Vigen":
+                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\Vigen-Hayde-Hamkhine.mp3");
+                    break;
+                default:
+                    Console.WriteLine("Invalid option. Please select between 1, 2, or 3.");
+                    break;
             }
         }
-        public static async Task PlayMusicAsync(string filePath)
+        public async Task PlayMusicAsync(string filePath)
         {
             try
             {
@@ -424,9 +488,19 @@ namespace ArsClientII
                     waveOutEvent.Init(audioFileReader);
                     waveOutEvent.Play();
 
+                    isPlaying = true; // Music started playing
+
                     Console.WriteLine("Playing music: " + filePath);
-                    Console.WriteLine("Press any key to stop playback.");
-                    Console.ReadKey();
+                    richTextBox1.AppendText($"Playing Musick {filePath}");
+
+                    while (waveOutEvent.PlaybackState == PlaybackState.Playing)
+                    {
+                        // Wait until the music finishes playing
+                        await Task.Delay(100);
+                    }
+
+                    Console.WriteLine("Music playback finished.");
+                    isPlaying = false; // Music stopped playing
 
                     waveOutEvent.Stop();
                     waveOutEvent.Dispose();
@@ -437,6 +511,7 @@ namespace ArsClientII
                 Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -479,6 +554,33 @@ namespace ArsClientII
             MyData.ShutDownCount = textBox5.Text;
             _context.Information.Add(MyData);
             _context.SaveChanges();
+        }
+
+        static void StopMusic()
+        {
+            waveOutEvent?.Stop();
+            waveOutEvent?.Dispose();
+            Console.WriteLine("Music stopped.");
+            isPlaying = false;
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            recognizer.Dispose();
+        }
+
+
+        public void StopListening()
+        {
+            if (recognizer != null)
+            {
+                recognizer.Dispose();
+                Console.WriteLine("Speech recognition stopped.");
+            }
         }
     }
     public class CoinGeckoResponse
