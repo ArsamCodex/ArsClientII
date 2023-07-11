@@ -387,7 +387,7 @@ namespace ArsClientII
             recognizer.SetInputToDefaultAudioDevice();
 
             // Define grammar choices
-            var choices = new Choices("Arsam", "Mehrdad", "Tupac", "Stop", "Vigen", "clean", "Armin", "pedarsag");
+            var choices = new Choices("Arsam", "Mehrdad", "Tupac", "Stop", "Vigen", "clean", "Armin", "pedarsag", "hey");
 
             // Create a grammar from the choices
             var grammar = new Grammar(new GrammarBuilder(choices));
@@ -420,6 +420,7 @@ namespace ArsClientII
 
                             richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}");
                         }
+
                         else
                         {
                             //  Console.WriteLine("Music is currently playing. Please wait until it finishes.");
@@ -433,12 +434,18 @@ namespace ArsClientII
                             // Console.WriteLine("No music is currently playing.");
                             richTextBox1.AppendText($"No Misu Ava");
                         }
+                        if (e.Result.Text.ToLower() == "hey")
+                        {
+                            await CleanUpPrefetch(path);
+
+                            richTextBox1.AppendText("TamizKari Done");
+                        }
                         else
                         {
                             await PlaySong(e.Result.Text);
                         }
                     }
-                 
+
                 }
                 else
                 {
@@ -596,6 +603,91 @@ namespace ArsClientII
         private void button4_Click(object sender, EventArgs e)
         {
 
+        }
+        public async void RemoveAllFilesInDirectory(string path)
+
+        {
+            // List<string> FailedfILEToDelete = new List<string>();
+
+            try
+            {
+                // Get the list of files in the specified directory
+                // string[] files = Directory.GetFiles(path);
+
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    try
+                    {
+                        File.Delete(file);
+                        richTextBox1.Text = file;
+                    }
+                    catch (IOException)
+                    {
+
+                    }
+                }
+
+                foreach (string subDirectory in Directory.GetDirectories(path))
+                {
+                    try
+                    {
+                        RemoveAllFilesInDirectory(subDirectory); // Recursively remove subdirectory contents
+                        Directory.Delete(subDirectory); // Remove the empty directory
+                    }
+                    catch (IOException)
+                    {
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Console.WriteLine($"An error occurred while removing files: {ex.Message}");
+
+            }
+        }
+        public async Task<int> CleanUpPrefetch(string path)
+
+        {
+            // List<string> FailedfILEToDelete = new List<string>();
+
+            try
+            {
+                // Get the list of files in the specified directory
+                // string[] files = Directory.GetFiles(path);
+
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    try
+                    {
+                        File.Delete(file);
+                        richTextBox1.AppendText(file);
+                    }
+                    catch (IOException)
+                    {
+
+                    }
+                }
+
+                foreach (string subDirectory in Directory.GetDirectories(path))
+                {
+                    try
+                    {
+                        RemoveAllFilesInDirectory(subDirectory); // Recursively remove subdirectory contents
+                        Directory.Delete(subDirectory); // Remove the empty directory
+                    }
+                    catch (IOException)
+                    {
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Console.WriteLine($"An error occurred while removing files: {ex.Message}");
+
+            }
+            return 0;
         }
     }
     public class CoinGeckoResponse

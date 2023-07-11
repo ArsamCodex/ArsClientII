@@ -100,6 +100,7 @@
             button10.TabIndex = 7;
             button10.Text = "Cpu Data";
             button10.UseVisualStyleBackColor = true;
+            button10.Visible = false;
             button10.Click += button10_Click;
             // 
             // label10
@@ -128,6 +129,7 @@
             button4.TabIndex = 4;
             button4.Text = "Start Cleaner";
             button4.UseVisualStyleBackColor = true;
+            button4.Visible = false;
             button4.Click += button4_Click;
             // 
             // checkBox1
