@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             groupBox1 = new GroupBox();
             button10 = new Button();
             label10 = new Label();
@@ -127,6 +128,7 @@
             button4.TabIndex = 4;
             button4.Text = "Start Cleaner";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // checkBox1
             // 
@@ -142,7 +144,7 @@
             // 
             richTextBox1.Location = new Point(600, 12);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(188, 286);
+            richTextBox1.Size = new Size(397, 379);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -469,9 +471,9 @@
             // 
             // button8
             // 
-            button8.Location = new Point(600, 305);
+            button8.Location = new Point(600, 397);
             button8.Name = "button8";
-            button8.Size = new Size(188, 23);
+            button8.Size = new Size(397, 23);
             button8.TabIndex = 5;
             button8.Text = "Get Data";
             button8.UseVisualStyleBackColor = true;
@@ -481,7 +483,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            BackColor = SystemColors.Control;
+            ClientSize = new Size(1009, 432);
             Controls.Add(button8);
             Controls.Add(tabControl1);
             Controls.Add(richTextBox1);
@@ -489,8 +492,10 @@
             Controls.Add(button2);
             Controls.Add(button3);
             Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            MaximizeBox = false;
             Name = "Form1";
-            Text = "Form1";
+            Text = resources.GetString("$this.Text");
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

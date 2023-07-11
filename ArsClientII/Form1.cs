@@ -37,7 +37,7 @@ namespace ArsClientII
             _context = new ApplicationDbContext();
         }
 
-        
+
         private void button3_Click(object sender, EventArgs e)
         {
             Shutdown();
@@ -337,9 +337,9 @@ namespace ArsClientII
             Console.WriteLine("Recovery partition removed successfully.");
         }
 
-        private void button10_Click(object sender, EventArgs e)
+        private async void button10_Click(object sender, EventArgs e)
         {
-            float cpuTemperature = GetCpuTemperature();
+            float cpuTemperature = await GetCpuTemperature();
 
             if (!float.IsNaN(cpuTemperature))
             {
@@ -355,7 +355,7 @@ namespace ArsClientII
             }
 
         }
-        public float GetCpuTemperature()
+        public async Task<float> GetCpuTemperature()
         {
             try
             {
@@ -380,74 +380,82 @@ namespace ArsClientII
             return float.NaN; // Return NaN if temperature retrieval fails
         }
 
-        private void tabPage3_Click(object sender, EventArgs e)
+        private async void tabPage3_Click(object sender, EventArgs e)
         {
-            
-                // Set the input language to English
-                recognizer.SetInputToDefaultAudioDevice();
 
-                // Define grammar choices
-                var choices = new Choices("Arsam", "Mehrdad", "Tupac", "Stop", "Vigen");
+            // Set the input language to English
+            recognizer.SetInputToDefaultAudioDevice();
 
-                // Create a grammar from the choices
-                var grammar = new Grammar(new GrammarBuilder(choices));
+            // Define grammar choices
+            var choices = new Choices("Arsam", "Mehrdad", "Tupac", "Stop", "Vigen", "clean", "Armin", "pedarsag");
 
-                // Load the grammar
-                recognizer.LoadGrammar(grammar);
+            // Create a grammar from the choices
+            var grammar = new Grammar(new GrammarBuilder(choices));
 
-                recognizer.RecognizeAsync(RecognizeMode.Multiple);
+            // Load the grammar
+            recognizer.LoadGrammar(grammar);
 
-                //Console.WriteLine("Speak something...");
-                richTextBox1.AppendText("Say Somethign ");
+            recognizer.RecognizeAsync(RecognizeMode.Multiple);
 
-                // Handle speech recognition events
-                recognizer.SpeechRecognized += async (sender, e) =>
+            //Console.WriteLine("Speak something...");
+            richTextBox1.AppendText("Say Somethign ");
+
+            // Handle speech recognition events
+            recognizer.SpeechRecognized += async (sender, e) =>
+            {
+                if (e.Result.Confidence >= 0.7) // Adjust confidence threshold as needed
                 {
-                    if (e.Result.Confidence >= 0.7) // Adjust confidence threshold as needed
+                    // Console.WriteLine("You said: " + e.Result.Text);
+                    richTextBox1.AppendText($"You Text IS {e.Result.Text}  ");
+                    if (isPlaying)
                     {
-                        // Console.WriteLine("You said: " + e.Result.Text);
-                        richTextBox1.AppendText($"You Text IS {e.Result.Text}  ");
-                        if (isPlaying)
+                        if (e.Result.Text.ToLower() == "stop")
                         {
-                            if (e.Result.Text.ToLower() == "stop")
-                            {
-                                StopMusic();
-                            }
-                            else
-                            {
-                                //  Console.WriteLine("Music is currently playing. Please wait until it finishes.");
-                                richTextBox1.AppendText($"Music is currently playing. Please wait until it finishes");
-                            }
+                            StopMusic();
+                        }
+                        if (e.Result.Text.ToLower() == "pedarsag")
+                        {
+                            var cpuTemperature = await GetCpuTemperature();
+                            var x = cpuTemperature.ToString();
+
+                            richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}");
                         }
                         else
                         {
-                            if (e.Result.Text.ToLower() == "stop")
-                            {
-                                // Console.WriteLine("No music is currently playing.");
-                                richTextBox1.AppendText($"No Misu Ava");
-                            }
-                            else
-                            {
-                                await PlaySong(e.Result.Text);
-                            }
+                            //  Console.WriteLine("Music is currently playing. Please wait until it finishes.");
+                            richTextBox1.AppendText($"Music is currently playing. Please wait until it finishes");
                         }
                     }
                     else
                     {
-                        // Console.WriteLine("Sorry, I couldn't understand your speech.");
-                        richTextBox1.AppendText($"Change Your accennt");
+                        if (e.Result.Text.ToLower() == "stop")
+                        {
+                            // Console.WriteLine("No music is currently playing.");
+                            richTextBox1.AppendText($"No Misu Ava");
+                        }
+                        else
+                        {
+                            await PlaySong(e.Result.Text);
+                        }
                     }
-                };
+                 
+                }
+                else
+                {
+                    // Console.WriteLine("Sorry, I couldn't understand your speech.");
+                    richTextBox1.AppendText($"Change Your accennt");
+                }
+            };
 
-                // Wait for user input to exit the program
-                Console.WriteLine("Press any key to exit...");
-                richTextBox1.AppendText("Any ket to exit");
-                richTextBox1.AppendText("Any ket to exit");
-                //Console.ReadKey();
-            
+            // Wait for user input to exit the program
+
+            richTextBox1.AppendText("Any ket to exit");
+            richTextBox1.AppendText("Any ket to exit");
+            //Console.ReadKey();
+
             richTextBox1.AppendText("Start Listenong wait 2 second");
         }
-      
+
 
         /* private  async void Recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
          {
@@ -490,7 +498,7 @@ namespace ArsClientII
 
                     isPlaying = true; // Music started playing
 
-                    Console.WriteLine("Playing music: " + filePath);
+
                     richTextBox1.AppendText($"Playing Musick {filePath}");
 
                     while (waveOutEvent.PlaybackState == PlaybackState.Playing)
@@ -499,7 +507,8 @@ namespace ArsClientII
                         await Task.Delay(100);
                     }
 
-                    Console.WriteLine("Music playback finished.");
+                    //Console.WriteLine("Music playback finished.");
+                    richTextBox1.AppendText("Musick Paly Back Finished");
                     isPlaying = false; // Music stopped playing
 
                     waveOutEvent.Stop();
@@ -508,7 +517,7 @@ namespace ArsClientII
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred while playing the music: " + ex.Message);
+                //  Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
 
@@ -556,11 +565,11 @@ namespace ArsClientII
             _context.SaveChanges();
         }
 
-        static void StopMusic()
+        public void StopMusic()
         {
             waveOutEvent?.Stop();
             waveOutEvent?.Dispose();
-            Console.WriteLine("Music stopped.");
+            richTextBox1.AppendText("Stoped Stoped");
             isPlaying = false;
         }
 
@@ -579,8 +588,14 @@ namespace ArsClientII
             if (recognizer != null)
             {
                 recognizer.Dispose();
-                Console.WriteLine("Speech recognition stopped.");
+                //Console.WriteLine("Speech recognition stopped.");
+                richTextBox1.AppendText(" Listen Stoped");
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
         }
     }
     public class CoinGeckoResponse
