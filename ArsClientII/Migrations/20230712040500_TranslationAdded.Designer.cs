@@ -3,6 +3,7 @@ using ArsClientII;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArsClientII.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230712040500_TranslationAdded")]
+    partial class TranslationAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,34 +41,6 @@ namespace ArsClientII.Migrations
                     b.HasKey("InformationID");
 
                     b.ToTable("Information");
-                });
-
-            modelBuilder.Entity("ArsClientII.TranslationWords", b =>
-                {
-                    b.Property<int>("TranslationWordsID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TranslationWordsID"));
-
-                    b.Property<string>("Dutch")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EnglishWord")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Farsi")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("French")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Spanish")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TranslationWordsID");
-
-                    b.ToTable("TranslationWords");
                 });
 #pragma warning restore 612, 618
         }

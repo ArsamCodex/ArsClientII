@@ -58,6 +58,7 @@
             label4 = new Label();
             label3 = new Label();
             tabPage3 = new TabPage();
+            label15 = new Label();
             tabPage4 = new TabPage();
             button12 = new Button();
             button11 = new Button();
@@ -70,10 +71,12 @@
             label11 = new Label();
             errorProvider1 = new ErrorProvider(components);
             button8 = new Button();
+            label16 = new Label();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
+            tabPage3.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
@@ -146,6 +149,7 @@
             // 
             richTextBox1.Location = new Point(600, 12);
             richTextBox1.Name = "richTextBox1";
+            richTextBox1.ScrollBars = RichTextBoxScrollBars.Horizontal;
             richTextBox1.Size = new Size(397, 379);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
@@ -359,6 +363,8 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(label16);
+            tabPage3.Controls.Add(label15);
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
@@ -367,6 +373,15 @@
             tabPage3.Text = "Vocie";
             tabPage3.UseVisualStyleBackColor = true;
             tabPage3.Click += tabPage3_Click;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(27, 18);
+            label15.Name = "label15";
+            label15.Size = new Size(0, 15);
+            label15.TabIndex = 0;
+            label15.Click += label15_Click;
             // 
             // tabPage4
             // 
@@ -481,6 +496,15 @@
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(21, 119);
+            label16.Name = "label16";
+            label16.Size = new Size(13, 15);
+            label16.TabIndex = 1;
+            label16.Text = "  ";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -506,6 +530,8 @@
             tabPage1.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            tabPage3.ResumeLayout(false);
+            tabPage3.PerformLayout();
             tabPage4.ResumeLayout(false);
             tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
@@ -554,5 +580,7 @@
         private TextBox textBox3;
         private Label label14;
         private Button button12;
+        private Label label15;
+        private Label label16;
     }
 }
