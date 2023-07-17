@@ -4,6 +4,7 @@ using ArsClientII;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArsClientII.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230716084606_AddedMovingAverages")]
+    partial class AddedMovingAverages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,25 +73,6 @@ namespace ArsClientII.Migrations
                     b.HasKey("InformationID");
 
                     b.ToTable("Information");
-                });
-
-            modelBuilder.Entity("ArsClientII.News", b =>
-                {
-                    b.Property<int>("NewsID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NewsID"));
-
-                    b.Property<DateTime>("CurrentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MyNews")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("NewsID");
-
-                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("ArsClientII.TranslationWords", b =>

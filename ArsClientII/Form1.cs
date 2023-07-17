@@ -1,26 +1,29 @@
-
 using System.Data;
 using System.Diagnostics;
 using YoutubeExplode;
 using System.Management;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System.Drawing;
+using NAudio.Wave;
+using NAudio.MediaFoundation;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.Speech.Recognition;
-using System.Media;
-using Microsoft.VisualBasic.ApplicationServices;
-using NAudio.Wave;
-using static System.Net.Mime.MediaTypeNames;
 using System.Speech.Synthesis;
 using AngleSharp.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Diagnostics.Metrics;
+using System.Numerics;
+using System.Text;
+using System.Net;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace ArsClientII
 {
     public partial class Form1 : Form
     {
+       
         string path = @"C:\Users\Armin\AppData\Local\Temp";
         string Prefetchpath = @"C:\Windows\Prefetch";
         string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
@@ -30,20 +33,14 @@ namespace ArsClientII
         private readonly ApplicationDbContext _context;
         private static bool isPlaying = false;
         private static bool isSilent = false;
-
         private static WaveOutEvent waveOutEvent;
         SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
-        
-
-
 
         public Form1()
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
         }
-
-
         private void button3_Click(object sender, EventArgs e)
         {
             Shutdown();
@@ -60,12 +57,10 @@ namespace ArsClientII
         {
 
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
-
         private async void button5_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textBox1.Text))
@@ -78,10 +73,9 @@ namespace ArsClientII
 
                 richTextBox1.Text = "Please Wait Until U get Done";
                 await DownloadAudioFromUrl(textBox1.Text, textBox2.Text);
-                richTextBox1.AppendText(Environment.NewLine + "File Downloaded Successfully. Operation Done!");
+                richTextBox1.AppendText("File Downloaded Successfully. Operation Done!" + Environment.NewLine);
                 // richTextBox1.AppendText(Environment.NewLine + "File Downloaded Here: " + textBox4.Text);
             }
-
         }
         private async Task DownloadAudioFromUrl(string videoUrl, string destinationPath)
         {
@@ -105,10 +99,9 @@ namespace ArsClientII
             }
             catch (Exception ex)
             {
-                //Console.WriteLine("An error occurred while downloading the audio: " + ex.Message);
+                richTextBox1.AppendText($"{ex.Message}");
             }
         }
-
         private void button6_Click(object sender, EventArgs e)
         {
             string jpgFilePath = textBox1.Text;
@@ -128,7 +121,6 @@ namespace ArsClientII
                 }
             }
         }
-
         private void button7_Click(object sender, EventArgs e)
         {
             try
@@ -150,15 +142,15 @@ namespace ArsClientII
                     {
                         // Perform case-insensitive search
                         int occurrences = new Regex(Regex.Escape(searchWord), RegexOptions.IgnoreCase).Matches(line).Count;
-                        richTextBox1.AppendText(line);
-                        richTextBox1.AppendText("-----------------------");
+                        richTextBox1.AppendText($"{line}{Environment.NewLine}");
+
 
                         count += occurrences;
                     }
 
                     // Display the count of occurrences to the user
                     // MessageBox.Show("The word '" + searchWord + "' appears " + count + " times in the file.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    richTextBox1.AppendText($"The word  {searchWord} appears  {count}  times in the file., Search Result");
+                    richTextBox1.AppendText($"The word  {searchWord} appears  {count}  times in the file., Search Result{Environment.NewLine}");
 
                 }
             }
@@ -194,41 +186,30 @@ namespace ArsClientII
             {
                 // Handle any exceptions that occur during the API request or timer setup
                 //MessageBox.Show("An error occurred: " + ex.Message);
-                richTextBox1.AppendText(ex.Message);
+                richTextBox1.AppendText($"{ex.Message}{Environment.NewLine}");
             }
         }
         private async Task UpdatePrices()
         {
-
             try
             {
                 label7.Text = await GetBinancePrice("BTCUSDT");
-
-                // label8.Text = await GetBinancePrice("BNBUSDT");
-
                 previousPrice = decimal.Parse(await GetBinancePrice("BTCUSDT"));
-                // previousPrice = decimal.Parse(label13.Text);
-
-
-
-                // labelPrice.Text = label13.Text;
-
-                // Compare the current price with the previous price and set the label color accordingly
                 if (previousPrice < decimal.Parse(label7.Text))
                 {
-                    richTextBox1.AppendText("Down Down Down");
+                    richTextBox1.AppendText($"Down Down Down{Environment.NewLine}");
                     label8.BackColor = colorDecrease;
                 }
                 else if (previousPrice > decimal.Parse(label7.Text))
                 {
                     label8.BackColor = colorIncrease;
-                    richTextBox1.AppendText("UP UP UP");
+                    richTextBox1.AppendText($"UP UP UP{Environment.NewLine}");
                 }
             }
             catch (Exception ex)
             {
                 // Handle any exceptions that occur during the API request
-                // MessageBox.Show("An error occurred: " + ex.Message);
+                richTextBox1.AppendText($"{ex.Message}");
             }
         }
         public async Task<string> GetBinancePrice(string symbol)
@@ -254,14 +235,12 @@ namespace ArsClientII
             catch (Exception ex)
             {
                 // Handle any exceptions that occur during the API request
-                richTextBox1.AppendText("No Internet Connetcio Valid" + ex.Message);
+                richTextBox1.AppendText($"No Internet Connetcio Valid{ex.Message}{Environment.NewLine}");
                 return null;
-
             }
         }
         static async Task<decimal> CalculateMovingAverage(string apiUrl)
         {
-
             using (HttpClient client = new HttpClient())
             {
                 string response = await client.GetStringAsync(apiUrl);
@@ -274,12 +253,10 @@ namespace ArsClientII
                 return movingAverage;
             }
         }
-
         private void label8_Click(object sender, EventArgs e)
         {
 
         }
-
         private void button8_Click(object sender, EventArgs e)
         {
             var entities = _context.Information.Count();
@@ -289,15 +266,14 @@ namespace ArsClientII
             MyNewData.ShutDownCount = "25420";
             _context.Information.Add(MyNewData);
             _context.SaveChanges();
+            _context.Dispose();
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             Restart();
         }
         [DllImport("user32.dll")]
         public static extern bool ExitWindowsEx(uint uFlags, uint dwReason);
-
         public static void LogOff()
         {
             const uint EWX_LOGOFF = 0x00000000;
@@ -305,12 +281,10 @@ namespace ArsClientII
 
             ExitWindowsEx(EWX_LOGOFF, SHTDN_REASON_FLAG_PLANNED);
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             LogOff();
         }
-
         private void button9_Click(object sender, EventArgs e)
         {
             DiskPartManager(textBox1.Text, textBox2.Text);
@@ -340,7 +314,7 @@ namespace ArsClientII
             // Wait for the process to exit
             process.WaitForExit();
 
-            Console.WriteLine("Recovery partition removed successfully.");
+            // Console.WriteLine("Recovery partition removed successfully.");
         }
 
         private async void button10_Click(object sender, EventArgs e)
@@ -350,16 +324,13 @@ namespace ArsClientII
             if (!float.IsNaN(cpuTemperature))
             {
                 //Console.WriteLine("CPU Temperature: " + cpuTemperature.ToString("0.00") + "°C");
-                richTextBox1.AppendText($"CPU Temperature:  + {cpuTemperature.ToString("0.00")}+ °C");
-                richTextBox1.AppendText("------------------------------" + Environment.NewLine);
-
+                richTextBox1.AppendText($"CPU Temperature:  + {cpuTemperature.ToString("0.00")}+ °C{Environment.NewLine}");
             }
             else
             {
                 //Console.WriteLine("Failed to retrieve CPU temperature.");
-                richTextBox1.AppendText("Something Went Wrong");
+                richTextBox1.AppendText($"Something Went Wrong exception line 361{Environment.NewLine}");
             }
-
         }
         public async Task<float> GetCpuTemperature()
         {
@@ -370,9 +341,8 @@ namespace ArsClientII
 
                 foreach (ManagementObject obj in objCollection)
                 {
-                    richTextBox1.AppendText(obj.ToString());
-                    richTextBox1.AppendText("--------------");
-                    richTextBox1.AppendText(objCollection.Count.ToString());
+                    richTextBox1.AppendText($"obj.ToString(){Environment.NewLine}");
+                    richTextBox1.AppendText($"objCollection.Count.ToString(){Environment.NewLine}");
                     // Convert the temperature value to Celsius
                     float temperature = Convert.ToInt32(obj["CurrentTemperature"]) / 10.0f - 273.15f;
                     return temperature;
@@ -386,21 +356,111 @@ namespace ArsClientII
             return float.NaN; // Return NaN if temperature retrieval fails
         }
 
+        private async Task<List<string>> GetH3Headers(string url)
+        {
+            List<string> headers = new List<string>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string pageContent = await response.Content.ReadAsStringAsync();
+
+                    // Find all the h3 tags using regular expression
+
+                    // string pattern = "<div class=\"news-item\">(.*?)<h2>(.*?)</h2>(.*?)<span class=\"date\">(.*?)</span>";
+
+
+                    string pattern = @"<h3\b[^>]*>(.*?)</h3>";
+                    MatchCollection matches = Regex.Matches(pageContent, pattern, RegexOptions.IgnoreCase);
+
+                    // Extract the header texts
+                    foreach (Match match in matches)
+                    {
+                        string header = RemoveHtmlTags(match.Groups[1].Value.Trim());
+                        headers.Add(header);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            return headers;
+        }
+
+        string FrenchTranslated;
+        public string CoreTranslation(string EnglishWord)
+        {
+            Dictionary<string, string> translationMap = new Dictionary<string, string>()
+    {
+        { "accident", "TestBro" },
+        { "bye", "au revoir" }
+    };
+
+            if (translationMap.ContainsKey(EnglishWord))
+            {
+                return translationMap[EnglishWord];
+            }
+            else
+            {
+                return "Translation not found";
+            }
+        }
+        static async Task<string> MoreDynamic(string incomingText)
+        {
+            string? finalResultToReturn = null;
+            List<string>? MyIntroduceSentencess = new List<string>();
+            //in sad cases
+            MyIntroduceSentencess.Add("Oh i Am Sorry for that ,why you had bad day , how can i make your day number 40");
+            //in cases of ha[piness
+            MyIntroduceSentencess.Add("what nice .............");
+            //free case
+            MyIntroduceSentencess.Add("what the fuck");
+            MyIntroduceSentencess.Add("welcome guest ");
+
+            bool CheckOrEcists = incomingText.Contains("sad") || incomingText.Contains("number 40");
+            if (CheckOrEcists)
+            {
+                finalResultToReturn = MyIntroduceSentencess.ElementAt(0).ToString();
+                return finalResultToReturn;
+            }
+            bool CheckOrEcists2 = incomingText.Contains("nice");
+            if (CheckOrEcists2)
+            {
+                finalResultToReturn = MyIntroduceSentencess.ElementAt(1).ToString();
+                return finalResultToReturn;
+            }
+            bool CheckOrEcists3 = incomingText.Contains("nice");
+            if (CheckOrEcists3)
+            {
+                finalResultToReturn = MyIntroduceSentencess.ElementAt(2).ToString();
+                return finalResultToReturn;
+            }
+            bool CheckOrEcists4 = incomingText.Contains("guest");
+            if (CheckOrEcists4)
+            {
+                finalResultToReturn = MyIntroduceSentencess.ElementAt(3).ToString();
+                return finalResultToReturn;
+            }
+          
+            return finalResultToReturn;
+        }
         private async void tabPage3_Click(object sender, EventArgs e)
         {
-            string mainText = "Voice Command Activated";
-          
-            
-
+            string mainText = "Voice Command Activated . . .";
+            ReadText($"Voice Commadn Activated listening ");
             label15.Text = mainText;
             // Set the input language to English
             recognizer.SetInputToDefaultAudioDevice();
-
             // Define grammar choices
             var choices = new Choices(
   "cleaning", "happy walking sir, i am waiting you here", "i am goin to walk", "Chavoshi", "i am eating", "bit coin", "number 1", "richbox",
   "247",
-  "my name is armin nice to meet you", "do you like talk to me ?", "hey Shadow", "Tupac", "Vigen",
+  "my name is armin nice to meet you", "do you like talk to me ?", "Tupac", "Vigen",
   "Arsam", "Stop", "Shutthefuckoff", "Mehrdad", "how sexy you are", "pedarsag", "two nine six",
   "able", "about", "above", "accept", "accident", "account", "accurate", "across", "act", "active",
   "actual", "add", "address", "admire", "admit", "advice", "afraid", "after", "afternoon", "again",
@@ -548,7 +608,7 @@ namespace ArsClientII
   "spell", "spend", "sphere", "spice", "spider", "spike", "spin", "spirit", "split", "spoil", "sponsor",
   "spoon", "sport", "spot", "spray", "spread", "spring", "spy", "square", "squeeze", "squirrel", "stable",
   "stadium", "staff", "stage", "stairs", "stamp", "stand", "start", "state", "stay", "steak", "steel", "i am very sad today",
-  "stem", "step", "stereo", "stick", "still", "sting", "stock", "stomach", "stone", "stool", "story",
+  "stem", "step", "stereo", "stick", "still", "sting", "stock", "stomach", "stone", "stool", "story", "star",
   "stove", "strategy", "street", "strike", "strong", "struggle", "student", "stuff", "stumble", "style",
   "subject", "submit", "subway", "success", "such", "sudden", "suffer", "sugar", "suggest", "suit", "summer",
   "sun", "sunny", "sunset", "super", "supply", "supreme", "sure", "surface", "surge", "surprise", "surround",
@@ -578,16 +638,11 @@ namespace ArsClientII
   "wife", "wild", "will", "win", "window", "wine", "wing", "wink", "winner", "winter", "wire", "wisdom",
   "wise", "wish", "witness", "wolf", "woman", "wonder", "wood", "wool", "word", "work", "world", "worry",
   "worth", "wrap", "wreck", "wrestle", "wrist", "write", "wrong", "yard", "year", "yellow", "you", "young",
-  "youth", "zebra", "zero", "zone", "zoo", "i am very fine today", "what is news","stop 1", "i am back");
+  "youth", "zebra", "zero", "zone", "zoo", "i am very fine today", "what is news", "stop 1", "i am back", "kill your self", "i am sleepy", "number 40",
+  "track 1", "50", "Tatal", "you are my lovely client", "thanks", "fifty", "number fifty",
+  "hey shadow i introduce you my guest", "guest", "hey this is stranger", "stranger", "this is my guest", "shadow", "hey shadow",
+  "thank you", "goriz", "coingraph", "CryptoNews", "naaz");
 
-
-            /*French orde
-             * "capable", "à propos de", "au-dessus", "accepter", "accident", "compte", "précis", "à travers", "agir", "actif",
-   "réel", "ajouter", "adresse", "admirer", "admettre", "conseil", "avoir peur", "après", "après-midi", "encore*/
-
-            /*Spanish order
-             * "capaz", "sobre", "arriba", "aceptar", "accidente", "cuenta", "preciso", "a través de", "actuar", "activo",
-   "actual", "agregar", "dirección", "admiro", "admitir", "consejo", "miedo", "después", "tarde", "otra vez*/
 
             // Create a grammar from the choices
             var grammar = new Grammar(new GrammarBuilder(choices));
@@ -598,7 +653,7 @@ namespace ArsClientII
             recognizer.RecognizeAsync(RecognizeMode.Multiple);
 
             //Console.WriteLine("Speak something...");
-            richTextBox1.AppendText("Say Somethign ");
+            richTextBox1.AppendText($"Say Somethign{Environment.NewLine}");
 
             // Handle speech recognition events
             recognizer.SpeechRecognized += async (sender, e) =>
@@ -606,7 +661,7 @@ namespace ArsClientII
                 if (e.Result.Confidence >= 0.7) // Adjust confidence threshold as needed
                 {
                     // Console.WriteLine("You said: " + e.Result.Text);
-                    richTextBox1.AppendText($" {e.Result.Text}  ");
+                    //  richTextBox1.AppendText($" {e.Result.Text}  ");
                     label16.Text = e.Result.Text;
                     if (isPlaying)
                     {
@@ -614,46 +669,32 @@ namespace ArsClientII
                         {
                             StopMusic();
                         }
-
                     }
-                    /*if(e.Result.Text.ToLower() == "two nine six")
-                    {
-                        ReadText("All Operation Silent , Stay Standby");
-                    }*/
                     else
                     {
                         //this.Close();
-                        if (e.Result.Text.ToLower() == "Shutthefuckoff")
+                        if (e.Result.Text.ToLower() == "kill your self")
                         {
+                            ReadText("Self kill activated , Are you ready, closing program in 5 4 3 2 1 second , Closed");
                             this.Close();
-
-                            richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}");
                         }
                         if (e.Result.Text.ToLower() == "accident")
                         {
                             var x = CoreTranslation(e.Result.Text);
-
                             var checkdata = _context.TranslationWords.Where(c => c.EnglishWord.Equals(x));
                             if (checkdata != null)
                             {
-
-
                                 TranslationWords translation = new TranslationWords();
                                 translation.EnglishWord = e.Result.Text;
                                 //cal function here 
-
                                 translation.French = x;
-
-
                                 _context.TranslationWords.Add(translation);
                                 _context.SaveChanges();
                                 _context.Dispose();
-
-                                // richTextBox1.AppendText($"Word {e.Result.Text} Added to database");
                             }
                             else
                             {
-                                richTextBox1.AppendText($"Word {e.Result.Text} Already exists to database");
+                                richTextBox1.AppendText($"Word {e.Result.Text} Already exists to database{Environment.NewLine}");
                             }
                         }
 
@@ -668,57 +709,47 @@ namespace ArsClientII
                         {
                             var cpuTemperature = await GetCpuTemperature();
                             var x = cpuTemperature.ToString();
-
-                            richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}");
+                            richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}{Environment.NewLine}");
                         }
-                        if (e.Result.Text.ToLower() == "hey shadow")
+                        if (e.Result.Text.ToLower().Contains("shadow") || e.Result.Text.ToLower().Contains("stranger")
+                        || e.Result.Text.ToLower().Contains("guest"))
                         {
-
+                            string myFinalSpeech;
                             List<string>? MyIntroduceSentencess = new List<string>();
-                            MyIntroduceSentencess.Add("I Am Shadow How Can i Help you");
-                            //  MyIntroduceSentencess.Add("hey dady what the fuck");
-
-
-
-                            ReadText(MyIntroduceSentencess.First());
-                            
+                            MyIntroduceSentencess.Add("Hey stranger , how yu become inside  , are you really stranger");
+                            MyIntroduceSentencess.Add("hello guest welcome here , let me introduce me im shadow nicec to meet you");
+                            MyIntroduceSentencess.Add("I Am shadow welcome here ");
+                            if (e.Result.Text.Contains("shadow"))
+                            {
+                                myFinalSpeech = MyIntroduceSentencess.ElementAt(2);
+                                ReadText(myFinalSpeech);
+                            }
+                            if (e.Result.Text.Contains("stranger"))
+                            {
+                                myFinalSpeech = MyIntroduceSentencess.ElementAt(0);
+                                ReadText(myFinalSpeech);
+                            }
+                            if (e.Result.Text.Contains("guest"))
+                            {
+                                myFinalSpeech = MyIntroduceSentencess.ElementAt(1);
+                                ReadText(myFinalSpeech);
+                            }
                         }
-
-                        if (e.Result.Text.ToLower() == "i am very sad today")
+                        if (e.Result.Text.ToLower().Contains("i am very sad today") || e.Result.Text.ToLower().Contains("number 40")
+                        || e.Result.Text.ToLower().Contains("i am sleepy") || e.Result.Text.ToLower().Contains("guest"))
                         {
-                            string? firstSentenceBAdMOod = null;
-                            string firstSentenceNiceMood;
-                            List<string>? MyIntroduceSentencess = new List<string>();
-                            MyIntroduceSentencess.Add("Oh i Am Sorry for that ,why you had bad day , how can i make your day");
-                            // MyIntroduceSentencess.Add("Oh very nice that you are happy today i hope you enjoy the day");
-
-
-                            firstSentenceBAdMOod = MyIntroduceSentencess.FirstOrDefault(sentence => e.Result.Text.Contains("very sad"));
-                            //firstSentenceNiceMood = MyIntroduceSentencess.FirstOrDefault(sentence => e.Result.Text.Contains("very nice"));
-
-                            ReadText(MyIntroduceSentencess.ElementAt(0));
-
-
-
-
+                            var x = await MoreDynamic(e.Result.Text);
+                            ReadText(x);
                         }
                         if (e.Result.Text.ToLower() == "i am very fine today")
                         {
                             string? firstSentenceBAdMOod = null;
                             string firstSentenceNiceMood;
                             List<string>? MyIntroduceSentencess = new List<string>();
-
                             MyIntroduceSentencess.Add("Oh very nice that you are happy today i hope you enjoy the day");
-
-
                             //  firstSentenceBAdMOod = MyIntroduceSentencess.FirstOrDefault(sentence => e.Result.Text.Contains("very sad"));
                             firstSentenceNiceMood = MyIntroduceSentencess.FirstOrDefault(sentence => e.Result.Text.Contains("very fine"));
-
-
                             ReadText(MyIntroduceSentencess.ElementAt(0));
-
-
-
                         }
 
                         if (e.Result.Text.ToLower() == "my name is armin nice to meet you")
@@ -727,7 +758,10 @@ namespace ArsClientII
                         }
                         if (e.Result.Text.ToLower() == "i am goin to walk")
                         {
-                            ReadText("This is very nice try to get positive wave, i am stayin here ");
+                            var x = await GetWeatherData("Southampton");
+                            richTextBox1.AppendText(x);
+
+                            ReadText($"This is very nice try to get positive wave, i am stayin here , please attention this is wether information of the day  {x} , and happy walking ,im going to record times you walking to see how it goes each month ");
                         }
                         if (e.Result.Text.ToLower() == "winter")
                         {
@@ -739,18 +773,17 @@ namespace ArsClientII
                             // ReadText("welcome back please provide your code , at the mean time make thee or coffe or what you want");
                             var xx = await GetBinancePrice("BTCUSDT");
                             var text = xx;
-                            
                             ReadText($"welcome back sir today is {DateTime.Now} , if you want deep information provide 4 digit code otherwise{text} ");
-                            
+
                             // TranslateSingelWordToFrench(" Bienvenue monsieur");
-                           //  TranslateSingleWordToSpeechAsync("Bienvenue");
+                            //  TranslateSingleWordToSpeechAsync("Bienvenue");
                         }
                         if (e.Result.Text.ToLower() == "number 1")
                         {
                             var finalSpeech = await GetBinancePrice("BTCUSDT");
                             var xx = finalSpeech.ToDouble();
                             var lllast = Math.Round(xx);
-                            richTextBox1.AppendText($" BTC price : {lllast}");
+                            richTextBox1.AppendText($" BTC price : {lllast}{Environment.NewLine}");
                             ReadText($"Bitcoin Price is {lllast.ToString()}");
                         }
                         if (e.Result.Text.ToLower() == "richbox")
@@ -763,30 +796,75 @@ namespace ArsClientII
                             var Finalmoving = await CalculateMovingAverage(apiUrl);
                             var xx = Finalmoving;
                             var lllast = Math.Round(xx);
-                            richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast}");
+                            richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast}{Environment.NewLine}");
                             ReadText($"Moving Average 100 days is {lllast.ToString()}");
                         }
                         if (e.Result.Text.ToLower() == "number 2")
                         {
+                            double PriceHelper;
+
                             var finalSpeech = await GetBinancePrice("FTMUSDT");
                             var xx = finalSpeech.ToDouble();
-                            richTextBox1.AppendText($" Fantom price is : {xx}");
-                            ReadText($"Fantom Price is {xx.ToString()}");
+                            richTextBox1.AppendText($" Fantom price is : {xx}{Environment.NewLine}");
+
+                            CoinAnalysis newData = new CoinAnalysis();
+                            newData.Date = DateTime.Now;
+                            newData.CoinName = "FTM";
+                            newData.Price = xx;
+                            newData.MovingAverage100 = 0.2614;
+                            PriceHelper = xx;
+                            _context.CoinAnalysis.Add(newData);
+                            _context.SaveChanges();
+                            _context.Dispose();
+                            ReadText($"Fantom Price is {xx}");
+
+                            var CkeckOlderData = _context.CoinAnalysis.ToList();
+                            var OneHoUREeARLIER = DateTime.Now.AddHours(-1).Hour;
+
+                            var MyCOmpektedata = CkeckOlderData
+                                 .Where(c => c.Date?.Hour == OneHoUREeARLIER)
+                                 .Select(c => c.Price);
+
+                            double oldprice = (double)MyCOmpektedata.FirstOrDefault();
+                            var xxc = (xx - oldprice) * 100;
+                            double percentageChange = ((xx - oldprice) / Math.Abs(oldprice)) * 100;
+                            richTextBox1.AppendText($"Precentagr Change %{percentageChange.ToString("F3")}{Environment.NewLine}");
+                            ReadText($"Compair To 1 Hour Past is ,{percentageChange.ToString("F3")}");
                         }
                         if (e.Result.Text.ToLower() == "what is news")
                         {
-                            string url = " https://www.forbes.com/sites/digital-assets/";
-                            List<string> MyList = await GetH3Headers(url);
-
-                            foreach (var x in MyList)
+                            var CheckOrNewsExistsInDb = _context.News.Where(c => c.MyNews.Contains(richTextBox1.Text)).FirstOrDefault();
+                            if (CheckOrNewsExistsInDb != null)
                             {
-                                richTextBox1.AppendText(x);
+                                var datefromdb = CheckOrNewsExistsInDb.CurrentDate;
+                                ReadText($"Big Dadee, This News Is Already Exists in our Database. I have read this news at {datefromdb}, I am not going to read it anymore. But if you want to rehear it, let me know. You know how to reach me?");
                             }
-                           
-                            ReadText($"{richTextBox1.Text}");
+                            else
+                            {
+                                string url = "https://www.forbes.com/sites/digital-assets/";
+                                List<string> MyList = await GetH3Headers(url);
+                                foreach (var x in MyList)
+                                {
+                                    richTextBox1.AppendText($"{x}{Environment.NewLine}");
+                                }
+                                News MyNews1 = new News();
+                                MyNews1.MyNews = richTextBox1.Text;
+                                _context.News.Add(MyNews1);
+                                _context.SaveChanges();
+                                _context.Dispose();
+                                ReadText($"{richTextBox1.Text}");
+                            }
                         }
 
-                   
+                        if (e.Result.Text.ToLower() == "you are my lovely client")
+                        {
+                            ReadText($"Thank you sir, You are welcome , maybe i will love you later,  kiss kiss , do you need code to remember you next time");
+                        }
+                        if (e.Result.Text.ToLower() == "thank you")
+                        {
+
+                            ReadText($"you are welcome");
+                        }
                         else
                         {
                             await PlaySong(e.Result.Text);
@@ -796,103 +874,22 @@ namespace ArsClientII
                 }
                 else
                 {
-                    // Console.WriteLine("Sorry, I couldn't understand your speech.");
-                    // richTextBox1.AppendText($"Change Your accennt");
+
                 }
             };
-
-
-            richTextBox1.AppendText("Start Listenong wait 2 second");
         }
-        private async Task<List<string>> GetH3Headers(string url)
-        {
-            List<string> headers = new List<string>();
-
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    HttpResponseMessage response = await client.GetAsync(url);
-                    response.EnsureSuccessStatusCode();
-                    string pageContent = await response.Content.ReadAsStringAsync();
-
-                    // Find all the h3 tags using regular expression
-                    string pattern = @"<h3\b[^>]*>(.*?)</h3>";
-                    MatchCollection matches = Regex.Matches(pageContent, pattern, RegexOptions.IgnoreCase);
-
-                    // Extract the header texts
-                    foreach (Match match in matches)
-                    {
-                        string header = RemoveHtmlTags(match.Groups[1].Value.Trim());
-                        headers.Add(header);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-            return headers;
-        }
-   
-        string FrenchTranslated;
-        public string CoreTranslation(string EnglishWord)
-        {
-            Dictionary<string, string> translationMap = new Dictionary<string, string>()
-    {
-        { "accident", "TestBro" },
-        { "bye", "au revoir" }
-    };
-
-            if (translationMap.ContainsKey(EnglishWord))
-            {
-                return translationMap[EnglishWord];
-            }
-            else
-            {
-                return "Translation not found";
-            }
-        }
-
-
-        public static async Task TranslateSingleWordToSpeechAsync(string incomingWord)
-        {
-            await Task.Run(() =>
-            {
-                SpeechSynthesizer synthesizer = new SpeechSynthesizer();
-
-                // Set the output to the default audio device
-                synthesizer.SetOutputToDefaultAudioDevice();
-
-                // Select the French voice
-                synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult, 0, new System.Globalization.CultureInfo("fr-FR"));
-
-                // Speak the word
-                synthesizer.Speak(incomingWord);
-
-                // Dispose the synthesizer to release resources
-                synthesizer.Dispose();
-            });
-        }
-
-
-
         public static void ReadText(string text)
         {
             using (SpeechSynthesizer synthesizer = new SpeechSynthesizer())
             {
                 // Set the default system voice
-                synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Teen, 2);
-
+                synthesizer.SelectVoiceByHints(VoiceGender.Neutral, VoiceAge.Teen, 2);
+                // synthesizer.SelectVoice("C:\\Users\\Armin\\Downloads\\sami.mp3");
                 // Speak the provided text
                 synthesizer.Speak(text);
                 synthesizer.Dispose();
             }
         }
-
-
-
 
         public void TranslateSingelWordToFrench(string IncomingWord)
         {
@@ -909,21 +906,17 @@ namespace ArsClientII
         {
             synthesizer.Speak(text);
         }
-      
-       
-
         private string RemoveHtmlTags(string html)
         {
             return Regex.Replace(html, "<.*?>", string.Empty);
         }
-    
-    public async Task PlaySong(string option)
+
+        public async Task PlaySong(string option)
         {
             switch (option)
             {
                 case "Tupac":
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\AllEyesonme.mp3");
-
+                    await PlayMusicAsync($"C:\\Users\\Armin\\Desktop\\AudioDownloaded\\AllEyesonme.mp3{Environment.NewLine}");
                     break;
                 case "Mehrdad":
                     await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\MehrdadHidden-Nakhla.mp3");
@@ -940,14 +933,25 @@ namespace ArsClientII
                 case "247":
                     await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\247HosseinEBLIS.MP3");
                     break;
-
+                case "number fifty":
+                    ReadText($"Music By :  Amir Tattaloo Song name: Allah, ");
+                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\Tataloo-Allah.mp3");
+                    break;
+                case "goriz":
+                    ReadText($"Music By :  Ebi  Song name: Goreez, ");
+                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\Ebi-Goriz.mp3");
+                    break;
+                case "naaz":
+                    ReadText($"Music by  : Moshsen Chaavoshi.   Song name: Naaz, ");
+                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\chavoshi-naz.mp3");
+                    break;
 
                 case "Shutthefuckoff":
                     this.Close();
                     break;
                 default:
                     // Console.WriteLine("Invalid option. Please select between 1, 2, or 3.");
-                    richTextBox1.AppendText($"InValid Option{label16.Text}");
+                    //  richTextBox1.AppendText($"InValid Option{label16.Text}");
                     // ReadText("French is hiver");
                     // Thread.Sleep(2000);
                     //  ReadText("Spanish  is invierno");
@@ -965,10 +969,7 @@ namespace ArsClientII
                     waveOutEvent.Play();
 
                     isPlaying = true; // Music started playing
-
-
-                    richTextBox1.AppendText($"Playing Musick {filePath}");
-
+                    richTextBox1.AppendText($"Playing Musick {filePath}{Environment.NewLine}");
                     while (waveOutEvent.PlaybackState == PlaybackState.Playing)
                     {
                         // Wait until the music finishes playing
@@ -976,7 +977,7 @@ namespace ArsClientII
                     }
 
                     //Console.WriteLine("Music playback finished.");
-                    richTextBox1.AppendText("Musick Paly Back Finished");
+                    richTextBox1.AppendText($"Musick Paly Back Finished{Environment.NewLine}");
                     isPlaying = false; // Music stopped playing
 
                     waveOutEvent.Stop();
@@ -988,10 +989,48 @@ namespace ArsClientII
                 //  Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
+        private const string ApiKey = "4af73d31c590a47216010f82f1a92878";
+        private const string BaseUrl = "http://api.openweathermap.org/data/2.5/weather";
 
-        private  void Form1_Load(object sender, EventArgs e)
+        public async Task<string> GetWeatherData(string city)
         {
-             
+            string apiUrl = $"{BaseUrl}?q={city}&appid={ApiKey}&units=metric";
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+
+                        dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+                        string main = data.weather[0].main;
+                        string description = data.weather[0].description;
+                        double temp = data.main.temp;
+                        double temp_min = data.main.temp_min;
+
+                        return $"Main: {main}, Description: {description}, Temp: {temp}, Temp_min: {temp_min}";
+                    }
+                    else
+                    {
+                        // Handle the case where the API request was not successful
+                        return "Unable to fetch weather data.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any exception that occurred during the API request
+                    return $"An error occurred: {ex.Message}";
+                }
+            }
+        }
+
+       
+        private async void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void tabPage4_Click(object sender, EventArgs e)
@@ -1016,6 +1055,7 @@ namespace ArsClientII
 
             }
             richTextBox1.AppendText("Operatio  nDone");
+            _context.Dispose();
 
         }
 
@@ -1031,13 +1071,14 @@ namespace ArsClientII
             MyData.ShutDownCount = textBox5.Text;
             _context.Information.Add(MyData);
             _context.SaveChanges();
+            _context.Dispose();
         }
 
         public void StopMusic()
         {
             waveOutEvent?.Stop();
             waveOutEvent?.Dispose();
-            richTextBox1.AppendText("Stoped Stoped");
+            richTextBox1.AppendText($"Stoped Stoped{Environment.NewLine}");
             isPlaying = false;
         }
 
@@ -1050,19 +1091,6 @@ namespace ArsClientII
             recognizer.Dispose();
             waveOutEvent.Dispose();
             _context.Dispose();
-
-
-        }
-
-
-        public void StopListening()
-        {
-            if (recognizer != null)
-            {
-                recognizer.Dispose();
-                //Console.WriteLine("Speech recognition stopped.");
-                richTextBox1.AppendText(" Listen Stoped");
-            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -1112,15 +1140,9 @@ namespace ArsClientII
             }
         }
         public async Task<int> CleanUpPrefetch(string path)
-
         {
-            // List<string> FailedfILEToDelete = new List<string>();
-
             try
             {
-                // Get the list of files in the specified directory
-                // string[] files = Directory.GetFiles(path);
-
                 foreach (string file in Directory.GetFiles(path))
                 {
                     try
@@ -1128,12 +1150,11 @@ namespace ArsClientII
                         File.Delete(file);
                         richTextBox1.AppendText(file);
                     }
-                    catch (IOException)
+                    catch (IOException Ex)
                     {
-
+                        richTextBox1.AppendText($"{Ex.Message}");
                     }
                 }
-
                 foreach (string subDirectory in Directory.GetDirectories(path))
                 {
                     try
