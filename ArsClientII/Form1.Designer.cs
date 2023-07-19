@@ -58,6 +58,7 @@
             label4 = new Label();
             label3 = new Label();
             tabPage3 = new TabPage();
+            label16 = new Label();
             label15 = new Label();
             tabPage4 = new TabPage();
             button12 = new Button();
@@ -71,7 +72,7 @@
             label11 = new Label();
             errorProvider1 = new ErrorProvider(components);
             button8 = new Button();
-            label16 = new Label();
+            txtMarketBuyNotional = new TextBox();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -94,6 +95,7 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Information";
+            groupBox1.Enter += groupBox1_Enter;
             // 
             // button10
             // 
@@ -363,6 +365,7 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(txtMarketBuyNotional);
             tabPage3.Controls.Add(label16);
             tabPage3.Controls.Add(label15);
             tabPage3.Location = new Point(4, 24);
@@ -373,6 +376,15 @@
             tabPage3.Text = "Vocie";
             tabPage3.UseVisualStyleBackColor = true;
             tabPage3.Click += tabPage3_Click;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(21, 119);
+            label16.Name = "label16";
+            label16.Size = new Size(13, 15);
+            label16.TabIndex = 1;
+            label16.Text = "  ";
             // 
             // label15
             // 
@@ -496,14 +508,13 @@
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
             // 
-            // label16
+            // txtMarketBuyNotional
             // 
-            label16.AutoSize = true;
-            label16.Location = new Point(21, 119);
-            label16.Name = "label16";
-            label16.Size = new Size(13, 15);
-            label16.TabIndex = 1;
-            label16.Text = "  ";
+            txtMarketBuyNotional.Location = new Point(64, 134);
+            txtMarketBuyNotional.Name = "txtMarketBuyNotional";
+            txtMarketBuyNotional.Size = new Size(100, 23);
+            txtMarketBuyNotional.TabIndex = 2;
+            txtMarketBuyNotional.TextChanged += textBox6_TextChanged;
             // 
             // Form1
             // 
@@ -582,5 +593,6 @@
         private Button button12;
         private Label label15;
         private Label label16;
+        private TextBox txtMarketBuyNotional;
     }
 }

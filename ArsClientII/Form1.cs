@@ -18,29 +18,47 @@ using System.Numerics;
 using System.Text;
 using System.Net;
 using Microsoft.VisualBasic.ApplicationServices;
+using HtmlAgilityPack;
+using System.Security.Cryptography;
+using System.Net.Http;
 
 namespace ArsClientII
 {
     public partial class Form1 : Form
     {
-       
+
         string path = @"C:\Users\Armin\AppData\Local\Temp";
         string Prefetchpath = @"C:\Windows\Prefetch";
         string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
         Color colorIncrease = Color.Green;
         Color colorDecrease = Color.Red;
         decimal previousPrice;
+        private const string Url = "https://cryptodaily.co.uk/";
         private readonly ApplicationDbContext _context;
         private static bool isPlaying = false;
         private static bool isSilent = false;
         private static WaveOutEvent waveOutEvent;
         SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
-
+        private OkexApiClient _okexApiClient;
+        private const string ApiKey = "fcf7293a-dc47-4b54-8ceb-deaedbb7f7d7";
+        private const string SecretKey = "6364844206A41E7F389C365C9480211E";
+        private const string BaseUrl = "https://www.okex.com";
         public Form1()
         {
             InitializeComponent();
+            _okexApiClient = new OkexApiClient();
             _context = new ApplicationDbContext();
         }
+
+       
+      
+     
+
+
+
+
+
+
         private void button3_Click(object sender, EventArgs e)
         {
             Shutdown();
@@ -446,7 +464,7 @@ namespace ArsClientII
                 finalResultToReturn = MyIntroduceSentencess.ElementAt(3).ToString();
                 return finalResultToReturn;
             }
-          
+
             return finalResultToReturn;
         }
         private async void tabPage3_Click(object sender, EventArgs e)
@@ -641,7 +659,7 @@ namespace ArsClientII
   "youth", "zebra", "zero", "zone", "zoo", "i am very fine today", "what is news", "stop 1", "i am back", "kill your self", "i am sleepy", "number 40",
   "track 1", "50", "Tatal", "you are my lovely client", "thanks", "fifty", "number fifty",
   "hey shadow i introduce you my guest", "guest", "hey this is stranger", "stranger", "this is my guest", "shadow", "hey shadow",
-  "thank you", "goriz", "coingraph", "CryptoNews", "naaz");
+  "thank you", "goriz", "coingraph", "CryptoNews", "naaz", "Tupac", "crypto daily", "number 6");
 
 
             // Create a grammar from the choices
@@ -818,7 +836,8 @@ namespace ArsClientII
                             _context.Dispose();
                             ReadText($"Fantom Price is {xx}");
 
-                            var CkeckOlderData = _context.CoinAnalysis.ToList();
+                            var Conn = new ApplicationDbContext();
+                            var CkeckOlderData = Conn.CoinAnalysis.ToList();
                             var OneHoUREeARLIER = DateTime.Now.AddHours(-1).Hour;
 
                             var MyCOmpektedata = CkeckOlderData
@@ -830,6 +849,7 @@ namespace ArsClientII
                             double percentageChange = ((xx - oldprice) / Math.Abs(oldprice)) * 100;
                             richTextBox1.AppendText($"Precentagr Change %{percentageChange.ToString("F3")}{Environment.NewLine}");
                             ReadText($"Compair To 1 Hour Past is ,{percentageChange.ToString("F3")}");
+                            Conn.Dispose();
                         }
                         if (e.Result.Text.ToLower() == "what is news")
                         {
@@ -849,11 +869,25 @@ namespace ArsClientII
                                 }
                                 News MyNews1 = new News();
                                 MyNews1.MyNews = richTextBox1.Text;
-                                _context.News.Add(MyNews1);
-                                _context.SaveChanges();
-                                _context.Dispose();
+                                var HelperCOntext = new ApplicationDbContext();
+                                HelperCOntext.News.Add(MyNews1);
+                                HelperCOntext.SaveChanges();
+                                HelperCOntext.Dispose();
                                 ReadText($"{richTextBox1.Text}");
                             }
+                        }
+
+                        if (e.Result.Text.ToLower() == "crypto daily")
+                        {
+
+                            List<string> headingTags = await GetAllHeadingTags(Url);
+                            foreach (var c in headingTags)
+                            {
+
+                                richTextBox1.AppendText($"{c}{Environment.NewLine}");
+                            }
+
+                            ReadText(richTextBox1.Text);
                         }
 
                         if (e.Result.Text.ToLower() == "you are my lovely client")
@@ -864,6 +898,24 @@ namespace ArsClientII
                         {
 
                             ReadText($"you are welcome");
+                        }
+                        if (e.Result.Text.ToLower() == "number 6")
+                        {
+
+
+                           // string symbol = "BTC-USDT"; // Replace with the trading pair you want to trade
+
+                            //decimal notional = "11.10";
+
+                          
+                                                    // decimal price = decimal.Parse(11.0); // Replace with the desired limit buy price
+                            string symbol = "BTC-USDT"; // Replace with the trading pair you want to trade
+                            decimal quantity = 12m; // Replace with the quantity you want to buy
+
+                            var response = await _okexApiClient.PlaceMarketBuyOrder(symbol, quantity);
+                            
+                            richTextBox1.AppendText(response);
+                            ReadText($"Order Succesd , Completed");
                         }
                         else
                         {
@@ -877,6 +929,51 @@ namespace ArsClientII
 
                 }
             };
+        }
+        private async Task<List<string>> GetAllHeadingTags(string url)
+        {
+            List<string> headingTags = new List<string>();
+
+            try
+            {
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    // Send the HTTP GET request and get the response
+                    HttpResponseMessage response = await httpClient.GetAsync(url);
+
+                    // Check if the request was successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the content as a string
+                        string htmlContent = await response.Content.ReadAsStringAsync();
+
+                        // Parse the HTML content using HtmlAgilityPack
+                        var htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                        htmlDocument.LoadHtml(htmlContent);
+
+                        // Select all heading tags (h1, h2, h3, h4, h5, h6)
+                        var headingNodes = htmlDocument.DocumentNode.SelectNodes("//h1 | //h2 | //h3 | //h4 | //h5 | //h6");
+                        if (headingNodes != null)
+                        {
+                            foreach (var headingNode in headingNodes)
+                            {
+                                string headingText = headingNode.InnerText.Trim();
+                                headingTags.Add(headingText);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to fetch the page. Status code: " + response.StatusCode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+
+            return headingTags;
         }
         public static void ReadText(string text)
         {
@@ -916,34 +1013,34 @@ namespace ArsClientII
             switch (option)
             {
                 case "Tupac":
-                    await PlayMusicAsync($"C:\\Users\\Armin\\Desktop\\AudioDownloaded\\AllEyesonme.mp3{Environment.NewLine}");
+                    await PlayMusicAsync($"C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\AllEyesonme.mp3{Environment.NewLine}");
                     break;
                 case "Mehrdad":
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\MehrdadHidden-Nakhla.mp3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\MehrdadHidden-Nakhla.mp3");
                     break;
                 case "Arsam":
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\balance.mp3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\balance.mp3");
                     break;
                 case "Vigen":
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\Vigen-Hayde-Hamkhine.mp3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\Vigen-Hayde-Hamkhine.mp3");
                     break;
                 case "Chavoshi":
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\chavoshi-mtasel.mp3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\chavoshi-mtasel.mp3");
                     break;
                 case "247":
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\247HosseinEBLIS.MP3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\247HosseinEBLIS.MP3");
                     break;
                 case "number fifty":
                     ReadText($"Music By :  Amir Tattaloo Song name: Allah, ");
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\Tataloo-Allah.mp3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\Tataloo-Allah.mp3");
                     break;
                 case "goriz":
                     ReadText($"Music By :  Ebi  Song name: Goreez, ");
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\Ebi-Goriz.mp3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\Ebi-Goriz.mp3");
                     break;
                 case "naaz":
                     ReadText($"Music by  : Moshsen Chaavoshi.   Song name: Naaz, ");
-                    await PlayMusicAsync("C:\\Users\\Armin\\Desktop\\AudioDownloaded\\chavoshi-naz.mp3");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\chavoshi-naz.mp3");
                     break;
 
                 case "Shutthefuckoff":
@@ -989,12 +1086,12 @@ namespace ArsClientII
                 //  Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
-        private const string ApiKey = "4af73d31c590a47216010f82f1a92878";
-        private const string BaseUrl = "http://api.openweathermap.org/data/2.5/weather";
+        private const string ApiKey2 = "4af73d31c590a47216010f82f1a92878";
+        private const string BaseUrl2 = "http://api.openweathermap.org/data/2.5/weather";
 
         public async Task<string> GetWeatherData(string city)
         {
-            string apiUrl = $"{BaseUrl}?q={city}&appid={ApiKey}&units=metric";
+            string apiUrl = $"{BaseUrl2}?q={city}&appid={ApiKey2}&units=metric";
 
             using (HttpClient client = new HttpClient())
             {
@@ -1027,7 +1124,7 @@ namespace ArsClientII
             }
         }
 
-       
+
         private async void Form1_Load(object sender, EventArgs e)
         {
 
@@ -1177,6 +1274,16 @@ namespace ArsClientII
         }
 
         private void label15_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
         {
 
         }
