@@ -842,13 +842,9 @@ namespace ArsClientII
                         }
                         if (e.Result.Text.ToLower() == "i am back")
                         {
-                            // ReadText("welcome back please provide your code , at the mean time make thee or coffe or what you want");
-                            var xx = await GetBinancePrice("BTCUSDT");
-                            var text = xx;
-                            ReadText($"welcome back sir today is {DateTime.Now} , if you want deep information provide 4 digit code otherwise{text} ");
 
-                            // TranslateSingelWordToFrench(" Bienvenue monsieur");
-                            //  TranslateSingleWordToSpeechAsync("Bienvenue");
+                            ReadText($"welcome back sir today is {DateTime.Now}  ");
+
                         }
                         if (e.Result.Text.ToLower() == "number 1")
                         {
@@ -856,9 +852,6 @@ namespace ArsClientII
                             var xx = finalSpeech.ToDouble();
                             var lllast = Math.Round(xx);
                             richTextBox1.AppendText($" BTC price : {lllast}{Environment.NewLine}");
-
-
-                            //label22.Text = await CalculateMovingAverage(string apiUrl, int timeIntervalInMinutes)
                             ReadText($"Bitcoin Price is {lllast.ToString()}");
                         }
                         if (e.Result.Text.ToLower() == "richbox")
@@ -881,13 +874,14 @@ namespace ArsClientII
                             label22.Text = movingAverage.ToString("F3");
 
 
-                            //Moving Global 100 Days Base
+                            //Moving Global 200 Days Base
+                            /*
                             var Finalmoving200 = await CalculateMovingAverage(apiUrl);
                             var xxx = Finalmoving200;
                             var lllast2 = Math.Round(xxx);
 
                             richTextBox1.AppendText($" Movig Avegarge 100 Days Global: {lllast2}{Environment.NewLine}");
-
+                            */
 
                             /*Moving 100days Time Frame 5 min*/
                             int timeIntervalInMinutes5 = 5;
@@ -906,7 +900,7 @@ namespace ArsClientII
                             string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
                             int timeIntervalInMinutes2005 = 5;
                             decimal movingAverage2005 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes2005);
-                           
+
                             label9.Text = movingAverage2005.ToString("F3");
                             richTextBox1.AppendText($" Movig Avegarge 200 Days Time Frame 5 Minutes : {movingAverage2005.ToString("F3")}{Environment.NewLine}");
 
@@ -1381,6 +1375,11 @@ namespace ArsClientII
         }
 
         private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter_1(object sender, EventArgs e)
         {
 
         }
