@@ -103,7 +103,6 @@ namespace ArsClientII
                 return last15MinMovingAverage;
             }
         }
-
         public void Shutdown()
         {
             Process.Start("shutdown", "/s /t 0");
@@ -218,7 +217,6 @@ namespace ArsClientII
                 MessageBox.Show("An error occurred while reading the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-       
         public async Task<string> GetBinancePrice(string symbol)
         {
             try
@@ -260,7 +258,6 @@ namespace ArsClientII
                 return movingAverage;
             }
         }
-
         [DllImport("user32.dll")]
         public static extern bool ExitWindowsEx(uint uFlags, uint dwReason);
         public static void LogOff()
@@ -270,7 +267,6 @@ namespace ArsClientII
 
             ExitWindowsEx(EWX_LOGOFF, SHTDN_REASON_FLAG_PLANNED);
         }
-   
         private void button9_Click(object sender, EventArgs e)
         {
             DiskPartManager(textBox1.Text, textBox2.Text);
@@ -302,7 +298,6 @@ namespace ArsClientII
 
             // Console.WriteLine("Recovery partition removed successfully.");
         }
-
         public async Task<float> GetCpuTemperature()
         {
             try
@@ -326,7 +321,6 @@ namespace ArsClientII
 
             return float.NaN; // Return NaN if temperature retrieval fails
         }
-
         private async Task<List<string>> GetH3Headers(string url)
         {
             List<string> headers = new List<string>();
@@ -1078,8 +1072,6 @@ namespace ArsClientII
                 //  Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
-       
-
         public async Task<string> GetWeatherData(string city)
         {
             string apiUrl = $"{BaseUrl2}?q={city}&appid={ApiKey2}&units=metric";
@@ -1114,7 +1106,6 @@ namespace ArsClientII
                 }
             }
         }
-
         private async void Form1_Load(object sender, EventArgs e)
         {
             ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . thank you");
@@ -1126,7 +1117,6 @@ namespace ArsClientII
             richTextBox1.AppendText($"Stoped Stoped{Environment.NewLine}");
             isPlaying = false;
         }
-
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
 
@@ -1219,7 +1209,6 @@ namespace ArsClientII
         {
 
         }
-
         private void label17_Click(object sender, EventArgs e)
         {
 
@@ -1228,12 +1217,10 @@ namespace ArsClientII
         {
 
         }
-
         private void label4_Click(object sender, EventArgs e)
         {
 
         }
-
         private void groupBox1_Enter_1(object sender, EventArgs e)
         {
 
