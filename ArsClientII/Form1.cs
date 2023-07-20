@@ -44,16 +44,16 @@ namespace ArsClientII
         private const string ApiKey = "fcf7293a-dc47-4b54-8ceb-deaedbb7f7d7";
         private const string SecretKey = "6364844206A41E7F389C365C9480211E";
         private const string BaseUrl = "https://www.okex.com";
+        string FrenchTranslated;
+        public System.Windows.Forms.Timer timer;
+        private const string ApiKey2 = "4af73d31c590a47216010f82f1a92878";
+        private const string BaseUrl2 = "http://api.openweathermap.org/data/2.5/weather";
         public Form1()
         {
             InitializeComponent();
             _okexApiClient = new OkexApiClient();
             _context = new ApplicationDbContext();
         }
-
-
-
-
         static async Task<decimal> CalculateMovingAverage(string apiUrl, int timeIntervalInMinutes)
         {
             using (HttpClient client = new HttpClient())
@@ -104,15 +104,6 @@ namespace ArsClientII
             }
         }
 
-
-
-
-
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Shutdown();
-        }
         public void Shutdown()
         {
             Process.Start("shutdown", "/s /t 0");
@@ -227,59 +218,7 @@ namespace ArsClientII
                 MessageBox.Show("An error occurred while reading the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public System.Windows.Forms.Timer timer;
-        private async void tabPage2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                await UpdatePrices(); // Call the method to update prices initially
-
-                decimal movingAverage = await CalculateMovingAverage(apiUrl);
-                string formattedMovingAverage = movingAverage.ToString("0.00");
-                var label8 = formattedMovingAverage;
-
-
-
-
-
-
-                timer = new System.Windows.Forms.Timer(); // Initialize the timer
-                timer.Interval = 15000; // Set the interval to 3 seconds
-                timer.Tick += async (s, args) => await UpdatePrices(); // Assign the update method to the tick event
-                timer.Start(); // Start the timer
-
-
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions that occur during the API request or timer setup
-                //MessageBox.Show("An error occurred: " + ex.Message);
-                richTextBox1.AppendText($"{ex.Message}{Environment.NewLine}");
-            }
-        }
-        private async Task UpdatePrices()
-        {
-            try
-            {
-                var getThis = await GetBinancePrice("BTCUSDT");
-                previousPrice = decimal.Parse(await GetBinancePrice("BTCUSDT"));
-                if (previousPrice < decimal.Parse(getThis))
-                {
-                    richTextBox1.AppendText($"Down Down Down{Environment.NewLine}");
-                    // label8.BackColor = colorDecrease;
-                }
-                else if (previousPrice > decimal.Parse(getThis))
-                {
-                    //label8.BackColor = colorIncrease;
-                    richTextBox1.AppendText($"UP UP UP{Environment.NewLine}");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions that occur during the API request
-                richTextBox1.AppendText($"{ex.Message}");
-            }
-        }
+       
         public async Task<string> GetBinancePrice(string symbol)
         {
             try
@@ -322,27 +261,6 @@ namespace ArsClientII
             }
         }
 
-
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void button8_Click(object sender, EventArgs e)
-        {
-            var entities = _context.Information.Count();
-            richTextBox1.AppendText(entities.ToString());
-            var MyNewData = new Information();
-            MyNewData.RestartCount = "547";
-            MyNewData.ShutDownCount = "25420";
-            _context.Information.Add(MyNewData);
-            _context.SaveChanges();
-            _context.Dispose();
-        }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Restart();
-        }
         [DllImport("user32.dll")]
         public static extern bool ExitWindowsEx(uint uFlags, uint dwReason);
         public static void LogOff()
@@ -352,10 +270,7 @@ namespace ArsClientII
 
             ExitWindowsEx(EWX_LOGOFF, SHTDN_REASON_FLAG_PLANNED);
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            LogOff();
-        }
+   
         private void button9_Click(object sender, EventArgs e)
         {
             DiskPartManager(textBox1.Text, textBox2.Text);
@@ -388,21 +303,6 @@ namespace ArsClientII
             // Console.WriteLine("Recovery partition removed successfully.");
         }
 
-        private async void button10_Click(object sender, EventArgs e)
-        {
-            float cpuTemperature = await GetCpuTemperature();
-
-            if (!float.IsNaN(cpuTemperature))
-            {
-                //Console.WriteLine("CPU Temperature: " + cpuTemperature.ToString("0.00") + "°C");
-                richTextBox1.AppendText($"CPU Temperature:  + {cpuTemperature.ToString("0.00")}+ °C{Environment.NewLine}");
-            }
-            else
-            {
-                //Console.WriteLine("Failed to retrieve CPU temperature.");
-                richTextBox1.AppendText($"Something Went Wrong exception line 361{Environment.NewLine}");
-            }
-        }
         public async Task<float> GetCpuTemperature()
         {
             try
@@ -462,8 +362,6 @@ namespace ArsClientII
 
             return headers;
         }
-
-        string FrenchTranslated;
         public string CoreTranslation(string EnglishWord)
         {
             Dictionary<string, string> translationMap = new Dictionary<string, string>()
@@ -1084,7 +982,6 @@ namespace ArsClientII
                 synthesizer.Dispose();
             }
         }
-
         public void TranslateSingelWordToFrench(string IncomingWord)
         {
             using (SpeechSynthesizer synthesizer = new SpeechSynthesizer())
@@ -1104,7 +1001,6 @@ namespace ArsClientII
         {
             return Regex.Replace(html, "<.*?>", string.Empty);
         }
-
         public async Task PlaySong(string option)
         {
             switch (option)
@@ -1182,8 +1078,7 @@ namespace ArsClientII
                 //  Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
-        private const string ApiKey2 = "4af73d31c590a47216010f82f1a92878";
-        private const string BaseUrl2 = "http://api.openweathermap.org/data/2.5/weather";
+       
 
         public async Task<string> GetWeatherData(string city)
         {
@@ -1220,28 +1115,10 @@ namespace ArsClientII
             }
         }
 
-
         private async void Form1_Load(object sender, EventArgs e)
         {
 
         }
-
-        private void tabPage4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label13_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         public void StopMusic()
         {
             waveOutEvent?.Stop();
@@ -1259,11 +1136,6 @@ namespace ArsClientII
             recognizer.Dispose();
             waveOutEvent.Dispose();
             _context.Dispose();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-
         }
         public void RemoveAllFilesInDirectory(string path)
 
@@ -1343,18 +1215,7 @@ namespace ArsClientII
             }
             return 0;
         }
-
         private void label15_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox6_TextChanged(object sender, EventArgs e)
         {
 
         }
@@ -1363,12 +1224,6 @@ namespace ArsClientII
         {
 
         }
-
-        private void label18_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void label19_Click(object sender, EventArgs e)
         {
 
