@@ -1117,7 +1117,7 @@ namespace ArsClientII
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-
+            ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . thank you");
         }
         public void StopMusic()
         {
