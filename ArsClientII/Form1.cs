@@ -236,7 +236,7 @@ namespace ArsClientII
 
                 decimal movingAverage = await CalculateMovingAverage(apiUrl);
                 string formattedMovingAverage = movingAverage.ToString("0.00");
-               var label8= formattedMovingAverage;
+                var label8 = formattedMovingAverage;
 
 
 
@@ -261,12 +261,12 @@ namespace ArsClientII
         {
             try
             {
-               var getThis = await GetBinancePrice("BTCUSDT");
+                var getThis = await GetBinancePrice("BTCUSDT");
                 previousPrice = decimal.Parse(await GetBinancePrice("BTCUSDT"));
                 if (previousPrice < decimal.Parse(getThis))
                 {
                     richTextBox1.AppendText($"Down Down Down{Environment.NewLine}");
-                   // label8.BackColor = colorDecrease;
+                    // label8.BackColor = colorDecrease;
                 }
                 else if (previousPrice > decimal.Parse(getThis))
                 {
@@ -871,6 +871,7 @@ namespace ArsClientII
                             var Finalmoving = await CalculateMovingAverage(apiUrl);
                             var xx = Finalmoving;
                             var lllast = Math.Round(xx);
+
                             richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast}{Environment.NewLine}");
 
                             //  string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
@@ -879,15 +880,46 @@ namespace ArsClientII
                             richTextBox1.AppendText(movingAverage.ToString("F3"));
                             label22.Text = movingAverage.ToString("F3");
 
+
+
+                            var Finalmoving200 = await CalculateMovingAverage(apiUrl);
+                            var xxx = Finalmoving200;
+                            var lllast2 = Math.Round(xxx);
+
+                            richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast2}{Environment.NewLine}");
+
                             int timeIntervalInMinutes5 = 5;
                             decimal movingAverage5 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes5);
                             richTextBox1.AppendText(movingAverage5.ToString("F3"));
                             label21.Text = movingAverage5.ToString("F3");
 
+                            int timeIntervalInMinutes60 = 60;
+                            decimal movingAverage60 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes60);
+                            richTextBox1.AppendText(movingAverage60.ToString("F3"));
+                            label3.Text = movingAverage60.ToString("F3");
+
+
+                            /**********************************************/
+
+                            string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
+                            int timeIntervalInMinutes2005 = 5;
+                            decimal movingAverage2005 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes2005);
+                            richTextBox1.AppendText(movingAverage2005.ToString("F3"));
+                            label9.Text = movingAverage2005.ToString("F3");
+                            richTextBox1.AppendText($" Movig Avegarge 100 Days : {movingAverage2005.ToString("F3")}{Environment.NewLine}");
 
 
 
-                            ReadText($"Moving Average 100 days is {lllast.ToString()}. {Environment.NewLine}Moving average 15 minute is {movingAverage.ToString("F3")}");
+
+                            int timeIntervalInMinutes20015 = 15;
+                            decimal movingAverage20015 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes20015);
+                            richTextBox1.AppendText(movingAverage20015.ToString("F3"));
+                            label5.Text = movingAverage20015.ToString("F3");
+
+
+
+
+                            ReadText($"Moving Averages  Moving Average 200 Days , % minutes is: {movingAverage2005.ToString("F3")} . 200 Days 15 minutes is:{movingAverage20015.ToString("F3")}");
                         }
                         if (e.Result.Text.ToLower() == "number 2")
                         {
@@ -1340,6 +1372,16 @@ namespace ArsClientII
         }
 
         private void label18_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label19_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }

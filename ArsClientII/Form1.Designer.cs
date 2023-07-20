@@ -38,19 +38,23 @@
             label21 = new Label();
             label22 = new Label();
             tabPage3 = new TabPage();
-            label15 = new Label();
             label16 = new Label();
+            label15 = new Label();
             tabPage1 = new TabPage();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            label1 = new Label();
-            label2 = new Label();
-            button5 = new Button();
-            button6 = new Button();
-            button7 = new Button();
             button9 = new Button();
+            button7 = new Button();
+            button6 = new Button();
+            button5 = new Button();
+            label2 = new Label();
+            label1 = new Label();
+            textBox2 = new TextBox();
+            textBox1 = new TextBox();
             tabControl1 = new TabControl();
             label3 = new Label();
+            label8 = new Label();
+            label9 = new Label();
+            label4 = new Label();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             tabPage3.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -76,9 +80,9 @@
             label17.AutoSize = true;
             label17.Location = new Point(334, 60);
             label17.Name = "label17";
-            label17.Size = new Size(70, 15);
+            label17.Size = new Size(88, 15);
             label17.TabIndex = 5;
-            label17.Text = "MV(D15TM)";
+            label17.Text = "MV(100D15TM)";
             label17.Click += label17_Click;
             // 
             // label19
@@ -86,18 +90,19 @@
             label19.AutoSize = true;
             label19.Location = new Point(334, 36);
             label19.Name = "label19";
-            label19.Size = new Size(65, 15);
+            label19.Size = new Size(83, 15);
             label19.TabIndex = 7;
-            label19.Text = "MA(D5TM)";
+            label19.Text = "MA(100D5TM)";
+            label19.Click += label19_Click;
             // 
             // label20
             // 
             label20.AutoSize = true;
             label20.Location = new Point(335, 90);
             label20.Name = "label20";
-            label20.Size = new Size(64, 15);
+            label20.Size = new Size(82, 15);
             label20.TabIndex = 8;
-            label20.Text = "MV(D1TM)";
+            label20.Text = "MV(100D1TM)";
             // 
             // label21
             // 
@@ -130,15 +135,6 @@
             tabPage3.UseVisualStyleBackColor = true;
             tabPage3.Click += tabPage3_Click;
             // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(27, 18);
-            label15.Name = "label15";
-            label15.Size = new Size(0, 15);
-            label15.TabIndex = 0;
-            label15.Click += label15_Click;
-            // 
             // label16
             // 
             label16.AutoSize = true;
@@ -147,6 +143,15 @@
             label16.Size = new Size(13, 15);
             label16.TabIndex = 1;
             label16.Text = "  ";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(27, 18);
+            label15.Name = "label15";
+            label15.Size = new Size(0, 15);
+            label15.TabIndex = 0;
+            label15.Click += label15_Click;
             // 
             // tabPage1
             // 
@@ -167,58 +172,15 @@
             tabPage1.UseVisualStyleBackColor = true;
             tabPage1.Click += tabPage1_Click;
             // 
-            // textBox1
+            // button9
             // 
-            textBox1.Location = new Point(102, 21);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(200, 23);
-            textBox1.TabIndex = 0;
-            textBox1.TextChanged += textBox1_TextChanged;
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(102, 50);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(200, 23);
-            textBox2.TabIndex = 1;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(3, 23);
-            label1.Name = "label1";
-            label1.Size = new Size(50, 15);
-            label1.TabIndex = 2;
-            label1.Text = "Path (D)";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(6, 58);
-            label2.Name = "label2";
-            label2.Size = new Size(49, 15);
-            label2.TabIndex = 3;
-            label2.Text = "Save (P)";
-            // 
-            // button5
-            // 
-            button5.Location = new Point(10, 91);
-            button5.Name = "button5";
-            button5.Size = new Size(292, 23);
-            button5.TabIndex = 4;
-            button5.Text = "MP# Download";
-            button5.UseVisualStyleBackColor = true;
-            button5.Click += button5_Click;
-            // 
-            // button6
-            // 
-            button6.Location = new Point(10, 119);
-            button6.Name = "button6";
-            button6.Size = new Size(292, 23);
-            button6.TabIndex = 5;
-            button6.Text = "ICO Maker";
-            button6.UseVisualStyleBackColor = true;
-            button6.Click += button6_Click;
+            button9.Location = new Point(10, 177);
+            button9.Name = "button9";
+            button9.Size = new Size(292, 23);
+            button9.TabIndex = 7;
+            button9.Text = "Disk";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
             // 
             // button7
             // 
@@ -230,15 +192,58 @@
             button7.UseVisualStyleBackColor = true;
             button7.Click += button7_Click;
             // 
-            // button9
+            // button6
             // 
-            button9.Location = new Point(10, 177);
-            button9.Name = "button9";
-            button9.Size = new Size(292, 23);
-            button9.TabIndex = 7;
-            button9.Text = "Disk";
-            button9.UseVisualStyleBackColor = true;
-            button9.Click += button9_Click;
+            button6.Location = new Point(10, 119);
+            button6.Name = "button6";
+            button6.Size = new Size(292, 23);
+            button6.TabIndex = 5;
+            button6.Text = "ICO Maker";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(10, 91);
+            button5.Name = "button5";
+            button5.Size = new Size(292, 23);
+            button5.TabIndex = 4;
+            button5.Text = "MP# Download";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(6, 58);
+            label2.Name = "label2";
+            label2.Size = new Size(49, 15);
+            label2.TabIndex = 3;
+            label2.Text = "Save (P)";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(3, 23);
+            label1.Name = "label1";
+            label1.Size = new Size(50, 15);
+            label1.TabIndex = 2;
+            label1.Text = "Path (D)";
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(102, 50);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(200, 23);
+            textBox2.TabIndex = 1;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(102, 21);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(200, 23);
+            textBox1.TabIndex = 0;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // tabControl1
             // 
@@ -259,12 +264,53 @@
             label3.TabIndex = 11;
             label3.Text = "label3";
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(583, 34);
+            label8.Name = "label8";
+            label8.Size = new Size(74, 15);
+            label8.TabIndex = 16;
+            label8.Text = "MV(200TM5)";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(730, 34);
+            label9.Name = "label9";
+            label9.Size = new Size(38, 15);
+            label9.TabIndex = 17;
+            label9.Text = "label9";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(583, 65);
+            label4.Name = "label4";
+            label4.Size = new Size(87, 15);
+            label4.TabIndex = 18;
+            label4.Text = "MV(200DTM15)";
+            label4.Click += label4_Click;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(730, 65);
+            label5.Name = "label5";
+            label5.Size = new Size(38, 15);
+            label5.TabIndex = 19;
+            label5.Text = "label5";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1260, 432);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label9);
+            Controls.Add(label8);
             Controls.Add(label3);
             Controls.Add(label22);
             Controls.Add(label21);
@@ -310,5 +356,9 @@
         private TabPage tabPage3;
         private Label label16;
         private Label label15;
+        private Label label9;
+        private Label label8;
+        private Label label5;
+        private Label label4;
     }
 }
