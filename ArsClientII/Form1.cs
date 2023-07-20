@@ -869,7 +869,12 @@ namespace ArsClientII
                             var xx = Finalmoving;
                             var lllast = Math.Round(xx);
                             richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast}{Environment.NewLine}");
-                            ReadText($"Moving Average 100 days is {lllast.ToString()}");
+
+                          //  string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+                            int timeIntervalInMinutes = 15;
+                            decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
+                            richTextBox1.AppendText(movingAverage.ToString("F3"));
+                            ReadText($"Moving Average 100 days is {lllast.ToString()}. {Environment.NewLine}Moving average 15 minute is {movingAverage.ToString("F3")}");
                         }
                         if (e.Result.Text.ToLower() == "number 2")
                         {
@@ -1180,11 +1185,7 @@ namespace ArsClientII
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-            int timeIntervalInMinutes = 15;
-            decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
-
-            richTextBox1.AppendText(movingAverage.ToString());
+            
         }
 
         private void tabPage4_Click(object sender, EventArgs e)
