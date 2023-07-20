@@ -72,7 +72,6 @@
             label11 = new Label();
             errorProvider1 = new ErrorProvider(components);
             button8 = new Button();
-            txtMarketBuyNotional = new TextBox();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -365,7 +364,6 @@
             // 
             // tabPage3
             // 
-            tabPage3.Controls.Add(txtMarketBuyNotional);
             tabPage3.Controls.Add(label16);
             tabPage3.Controls.Add(label15);
             tabPage3.Location = new Point(4, 24);
@@ -508,14 +506,6 @@
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
             // 
-            // txtMarketBuyNotional
-            // 
-            txtMarketBuyNotional.Location = new Point(64, 134);
-            txtMarketBuyNotional.Name = "txtMarketBuyNotional";
-            txtMarketBuyNotional.Size = new Size(100, 23);
-            txtMarketBuyNotional.TabIndex = 2;
-            txtMarketBuyNotional.TextChanged += textBox6_TextChanged;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -593,6 +583,5 @@
         private Button button12;
         private Label label15;
         private Label label16;
-        private TextBox txtMarketBuyNotional;
     }
 }

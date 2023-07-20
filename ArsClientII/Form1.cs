@@ -21,6 +21,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using HtmlAgilityPack;
 using System.Security.Cryptography;
 using System.Net.Http;
+using System;
 
 namespace ArsClientII
 {
@@ -50,9 +51,58 @@ namespace ArsClientII
             _context = new ApplicationDbContext();
         }
 
-       
-      
-     
+
+
+
+        static async Task<decimal> CalculateMovingAverage(string apiUrl, int timeIntervalInMinutes)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string response = await client.GetStringAsync(apiUrl);
+                CoinGeckoResponse data = JsonConvert.DeserializeObject<CoinGeckoResponse>(response);
+
+                // Assuming data.Prices is an array of [timestamp, price]
+                // Convert timestamp to DateTime and sort by timestamp
+                var sortedData = data.Prices
+                    .Select(p => new { TimeStamp = DateTimeOffset.FromUnixTimeMilliseconds((long)p[0]).UtcDateTime, Price = p[1] })
+                    .OrderBy(p => p.TimeStamp)
+                    .ToList();
+
+                // Calculate the number of data points within the desired time interval
+                int dataPointsWithinInterval = timeIntervalInMinutes / 5; // Assuming the API returns data every 5 minutes
+                if (dataPointsWithinInterval == 0)
+                {
+                    throw new ArgumentException("Time interval should be a multiple of 5 minutes.");
+                }
+
+                // Calculate the moving average for the given time interval
+                List<decimal> movingAverages = new List<decimal>();
+                decimal sum = 0;
+                for (int i = 0; i < sortedData.Count; i++)
+                {
+                    sum += sortedData[i].Price;
+
+                    // If the number of data points considered for the moving average equals the desired interval,
+                    // calculate and store the moving average for this interval
+                    if (i >= dataPointsWithinInterval - 1)
+                    {
+                        decimal movingAverage = sum / dataPointsWithinInterval;
+                        movingAverages.Add(movingAverage);
+
+                        // Move the window by removing the oldest data point
+                        sum -= sortedData[i - dataPointsWithinInterval + 1].Price;
+                    }
+                }
+
+                // The movingAverages list now contains the 15-minute moving averages for each interval in chronological order.
+                // You can use this data as needed.
+
+                // For example, if you want to get the most recent 15-minute moving average:
+                decimal last15MinMovingAverage = movingAverages.Last();
+
+                return last15MinMovingAverage;
+            }
+        }
 
 
 
@@ -271,6 +321,9 @@ namespace ArsClientII
                 return movingAverage;
             }
         }
+
+    
+
         private void label8_Click(object sender, EventArgs e)
         {
 
@@ -470,7 +523,7 @@ namespace ArsClientII
         private async void tabPage3_Click(object sender, EventArgs e)
         {
             string mainText = "Voice Command Activated . . .";
-            ReadText($"Voice Commadn Activated listening ");
+            ReadText($"Voice Command Activated . I am  listening . Today Is:  {DateTime.Now.Date} ");
             label15.Text = mainText;
             // Set the input language to English
             recognizer.SetInputToDefaultAudioDevice();
@@ -659,7 +712,8 @@ namespace ArsClientII
   "youth", "zebra", "zero", "zone", "zoo", "i am very fine today", "what is news", "stop 1", "i am back", "kill your self", "i am sleepy", "number 40",
   "track 1", "50", "Tatal", "you are my lovely client", "thanks", "fifty", "number fifty",
   "hey shadow i introduce you my guest", "guest", "hey this is stranger", "stranger", "this is my guest", "shadow", "hey shadow",
-  "thank you", "goriz", "coingraph", "CryptoNews", "naaz", "Tupac", "crypto daily", "number 6");
+  "thank you", "goriz", "coingraph", "CryptoNews", "naaz", "Tupac", "crypto daily", "number 6", "pac",
+  "tupac", "Tupac","Pocheel","number 4");
 
 
             // Create a grammar from the choices
@@ -903,17 +957,17 @@ namespace ArsClientII
                         {
 
 
-                           // string symbol = "BTC-USDT"; // Replace with the trading pair you want to trade
+                            // string symbol = "BTC-USDT"; // Replace with the trading pair you want to trade
 
                             //decimal notional = "11.10";
 
-                          
-                                                    // decimal price = decimal.Parse(11.0); // Replace with the desired limit buy price
+
+                            // decimal price = decimal.Parse(11.0); // Replace with the desired limit buy price
                             string symbol = "BTC-USDT"; // Replace with the trading pair you want to trade
                             decimal quantity = 12m; // Replace with the quantity you want to buy
 
                             var response = await _okexApiClient.PlaceMarketBuyOrder(symbol, quantity);
-                            
+
                             richTextBox1.AppendText(response);
                             ReadText($"Order Succesd , Completed");
                         }
@@ -1013,7 +1067,7 @@ namespace ArsClientII
             switch (option)
             {
                 case "Tupac":
-                    await PlayMusicAsync($"C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\AllEyesonme.mp3{Environment.NewLine}");
+                    await PlayMusicAsync($"C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\Tupac.mp3{Environment.NewLine}");
                     break;
                 case "Mehrdad":
                     await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\MehrdadHidden-Nakhla.mp3");
@@ -1042,9 +1096,8 @@ namespace ArsClientII
                     ReadText($"Music by  : Moshsen Chaavoshi.   Song name: Naaz, ");
                     await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\chavoshi-naz.mp3");
                     break;
-
-                case "Shutthefuckoff":
-                    this.Close();
+                case "number 4":
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\Pochil.mp3");
                     break;
                 default:
                     // Console.WriteLine("Invalid option. Please select between 1, 2, or 3.");
@@ -1127,7 +1180,11 @@ namespace ArsClientII
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+            string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+            int timeIntervalInMinutes = 15;
+            decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
 
+            richTextBox1.AppendText(movingAverage.ToString());
         }
 
         private void tabPage4_Click(object sender, EventArgs e)

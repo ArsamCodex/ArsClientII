@@ -14,6 +14,7 @@ namespace ArsClientII
         public DbSet<Information>? Information { get; set; } = default;
         public DbSet<TranslationWords>? TranslationWords { get; set; } = default;
         public DbSet<CoinAnalysis>? CoinAnalysis { get; set; } = default;
+        public DbSet<Trader>? Trader { get; set; } = default;
         public DbSet<News>? News { get; set; } = default;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
