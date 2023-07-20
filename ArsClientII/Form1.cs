@@ -236,7 +236,7 @@ namespace ArsClientII
 
                 decimal movingAverage = await CalculateMovingAverage(apiUrl);
                 string formattedMovingAverage = movingAverage.ToString("0.00");
-                label8.Text = formattedMovingAverage;
+               var label8= formattedMovingAverage;
 
 
 
@@ -261,16 +261,16 @@ namespace ArsClientII
         {
             try
             {
-                label7.Text = await GetBinancePrice("BTCUSDT");
+               var getThis = await GetBinancePrice("BTCUSDT");
                 previousPrice = decimal.Parse(await GetBinancePrice("BTCUSDT"));
-                if (previousPrice < decimal.Parse(label7.Text))
+                if (previousPrice < decimal.Parse(getThis))
                 {
                     richTextBox1.AppendText($"Down Down Down{Environment.NewLine}");
-                    label8.BackColor = colorDecrease;
+                   // label8.BackColor = colorDecrease;
                 }
-                else if (previousPrice > decimal.Parse(label7.Text))
+                else if (previousPrice > decimal.Parse(getThis))
                 {
-                    label8.BackColor = colorIncrease;
+                    //label8.BackColor = colorIncrease;
                     richTextBox1.AppendText($"UP UP UP{Environment.NewLine}");
                 }
             }
@@ -322,7 +322,7 @@ namespace ArsClientII
             }
         }
 
-    
+
 
         private void label8_Click(object sender, EventArgs e)
         {
@@ -713,7 +713,7 @@ namespace ArsClientII
   "track 1", "50", "Tatal", "you are my lovely client", "thanks", "fifty", "number fifty",
   "hey shadow i introduce you my guest", "guest", "hey this is stranger", "stranger", "this is my guest", "shadow", "hey shadow",
   "thank you", "goriz", "coingraph", "CryptoNews", "naaz", "Tupac", "crypto daily", "number 6", "pac",
-  "tupac", "Tupac","Pocheel","number 4");
+  "tupac", "Tupac", "Pocheel", "number 4");
 
 
             // Create a grammar from the choices
@@ -856,6 +856,9 @@ namespace ArsClientII
                             var xx = finalSpeech.ToDouble();
                             var lllast = Math.Round(xx);
                             richTextBox1.AppendText($" BTC price : {lllast}{Environment.NewLine}");
+
+
+                            //label22.Text = await CalculateMovingAverage(string apiUrl, int timeIntervalInMinutes)
                             ReadText($"Bitcoin Price is {lllast.ToString()}");
                         }
                         if (e.Result.Text.ToLower() == "richbox")
@@ -870,10 +873,20 @@ namespace ArsClientII
                             var lllast = Math.Round(xx);
                             richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast}{Environment.NewLine}");
 
-                          //  string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+                            //  string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
                             int timeIntervalInMinutes = 15;
                             decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
                             richTextBox1.AppendText(movingAverage.ToString("F3"));
+                            label22.Text = movingAverage.ToString("F3");
+
+                            int timeIntervalInMinutes5 = 5;
+                            decimal movingAverage5 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes5);
+                            richTextBox1.AppendText(movingAverage5.ToString("F3"));
+                            label21.Text = movingAverage5.ToString("F3");
+
+
+
+
                             ReadText($"Moving Average 100 days is {lllast.ToString()}. {Environment.NewLine}Moving average 15 minute is {movingAverage.ToString("F3")}");
                         }
                         if (e.Result.Text.ToLower() == "number 2")
@@ -1185,7 +1198,7 @@ namespace ArsClientII
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void tabPage4_Click(object sender, EventArgs e)
@@ -1198,35 +1211,10 @@ namespace ArsClientII
 
         }
 
-        private void button11_Click(object sender, EventArgs e)
-        {
-            var MyData = _context.Information
-                .Where(c => c.InformationID == 2);
-            foreach (var x in MyData)
-            {
-                textBox3.Text = x.InformationID.ToString();
-                textBox4.Text = x.ShutDownCount.ToString();
-                textBox5.Text = x.RestartCount.ToString();
-
-            }
-            richTextBox1.AppendText("Operatio  nDone");
-            _context.Dispose();
-
-        }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void button12_Click(object sender, EventArgs e)
-        {
-            var MyData = new Information();
-            MyData.RestartCount = textBox4.Text;
-            MyData.ShutDownCount = textBox5.Text;
-            _context.Information.Add(MyData);
-            _context.SaveChanges();
-            _context.Dispose();
         }
 
         public void StopMusic()
@@ -1342,6 +1330,16 @@ namespace ArsClientII
         }
 
         private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label17_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label18_Click(object sender, EventArgs e)
         {
 
         }
