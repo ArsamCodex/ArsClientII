@@ -41,18 +41,21 @@ namespace ArsClientII
         private static WaveOutEvent waveOutEvent;
         SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
         private OkexApiClient _okexApiClient;
+        private WetherClient _wether;
         private const string ApiKey = "fcf7293a-dc47-4b54-8ceb-deaedbb7f7d7";
         private const string SecretKey = "6364844206A41E7F389C365C9480211E";
         private const string BaseUrl = "https://www.okex.com";
         string FrenchTranslated;
         public System.Windows.Forms.Timer timer;
-        private const string ApiKey2 = "4af73d31c590a47216010f82f1a92878";
-        private const string BaseUrl2 = "http://api.openweathermap.org/data/2.5/weather";
+        private HelpersMethods _HelperMethods;
+       
         public Form1()
         {
             InitializeComponent();
             _okexApiClient = new OkexApiClient();
             _context = new ApplicationDbContext();
+            _wether = new WetherClient();
+            _HelperMethods = new HelpersMethods();
         }
         static async Task<decimal> CalculateMovingAverage(string apiUrl, int timeIntervalInMinutes)
         {
@@ -130,55 +133,18 @@ namespace ArsClientII
                 errorProvider1.Clear();
 
                 richTextBox1.Text = "Please Wait Until U get Done";
-                await DownloadAudioFromUrl(textBox1.Text, textBox2.Text);
+                await _HelperMethods.DownloadAudioFromUrl(textBox1.Text, textBox2.Text);
                 richTextBox1.AppendText("File Downloaded Successfully. Operation Done!" + Environment.NewLine);
-                // richTextBox1.AppendText(Environment.NewLine + "File Downloaded Here: " + textBox4.Text);
-            }
-        }
-        private async Task DownloadAudioFromUrl(string videoUrl, string destinationPath)
-        {
-            try
-            {
-                var youtube = new YoutubeClient();
-                var video = await youtube.Videos.GetAsync(videoUrl);
-
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
-                var audioStreams = streamManifest.GetAudioStreams().Where(s => s.Container == YoutubeExplode.Videos.Streams.Container.Mp4);
-                var streamInfo = audioStreams.OrderByDescending(s => s.Bitrate).FirstOrDefault();
-
-                if (streamInfo != null)
-                {
-                    await youtube.Videos.Streams.DownloadAsync(streamInfo, destinationPath);
-                }
-                else
-                {
-                    //  Console.WriteLine("No audio stream found for the given video.");
-                }
-            }
-            catch (Exception ex)
-            {
-                richTextBox1.AppendText($"{ex.Message}");
             }
         }
         private void button6_Click(object sender, EventArgs e)
         {
             string jpgFilePath = textBox1.Text;
             string icoFilePath = textBox2.Text;
-            ConvertJpgToIcon(jpgFilePath, icoFilePath);
+            _HelperMethods.ConvertJpgToIcon(jpgFilePath, icoFilePath);
             richTextBox1.AppendText("ICO Extention Done");
         }
-        static void ConvertJpgToIcon(string jpgFilePath, string icoFilePath)
-        {
-            using (Bitmap bitmap = new Bitmap(jpgFilePath))
-            {
-                Icon icon = Icon.FromHandle(bitmap.GetHicon());
-
-                using (System.IO.FileStream stream = new System.IO.FileStream(icoFilePath, System.IO.FileMode.Create))
-                {
-                    icon.Save(stream);
-                }
-            }
-        }
+      
         private void button7_Click(object sender, EventArgs e)
         {
             try
@@ -258,69 +224,14 @@ namespace ArsClientII
                 return movingAverage;
             }
         }
-        [DllImport("user32.dll")]
-        public static extern bool ExitWindowsEx(uint uFlags, uint dwReason);
-        public static void LogOff()
-        {
-            const uint EWX_LOGOFF = 0x00000000;
-            const uint SHTDN_REASON_FLAG_PLANNED = 0x80000000;
+       
 
-            ExitWindowsEx(EWX_LOGOFF, SHTDN_REASON_FLAG_PLANNED);
-        }
         private void button9_Click(object sender, EventArgs e)
         {
             DiskPartManager(textBox1.Text, textBox2.Text);
         }
-        public void DiskPartManager(string DiskPart, string PartiotionNumber)
-        {
-            string script = $"select disk {DiskPart}\n" +
-                       $"select partition {PartiotionNumber}\n" +
-                       $"delete partition override\n" +
-                       $"exit";
+     
 
-            // Create a ProcessStartInfo instance for Diskpart
-            ProcessStartInfo psi = new ProcessStartInfo("diskpart.exe")
-            {
-                UseShellExecute = false,
-                RedirectStandardInput = true,
-                CreateNoWindow = true
-            };
-
-            // Start the Diskpart process
-            Process process = Process.Start(psi);
-
-            // Pass the script to Diskpart's standard input
-            process.StandardInput.WriteLine(script);
-            process.StandardInput.Close();
-
-            // Wait for the process to exit
-            process.WaitForExit();
-
-            // Console.WriteLine("Recovery partition removed successfully.");
-        }
-        public async Task<float> GetCpuTemperature()
-        {
-            try
-            {
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
-                ManagementObjectCollection objCollection = searcher.Get();
-
-                foreach (ManagementObject obj in objCollection)
-                {
-                    richTextBox1.AppendText($"obj.ToString(){Environment.NewLine}");
-                    richTextBox1.AppendText($"objCollection.Count.ToString(){Environment.NewLine}");
-                    // Convert the temperature value to Celsius
-                    float temperature = Convert.ToInt32(obj["CurrentTemperature"]) / 10.0f - 273.15f;
-                    return temperature;
-                }
-            }
-            catch (ManagementException ex)
-            {
-                //Console.WriteLine("An error occurred while retrieving the CPU temperature: " + ex.Message);
-            }
-
-            return float.NaN; // Return NaN if temperature retrieval fails
-        }
         private async Task<List<string>> GetH3Headers(string url)
         {
             List<string> headers = new List<string>();
@@ -722,7 +633,7 @@ namespace ArsClientII
                         }
                         if (e.Result.Text.ToLower() == "i am goin to walk")
                         {
-                            var x = await GetWeatherData("Southampton");
+                            var x = await _wether.GetWeatherData("London");
                             richTextBox1.AppendText(x);
 
                             ReadText($"This is very nice try to get positive wave, i am stayin here , please attention this is wether information of the day  {x} , and happy walking ,im going to record times you walking to see how it goes each month ");
@@ -1072,40 +983,7 @@ namespace ArsClientII
                 //  Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
-        public async Task<string> GetWeatherData(string city)
-        {
-            string apiUrl = $"{BaseUrl2}?q={city}&appid={ApiKey2}&units=metric";
-
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    HttpResponseMessage response = await client.GetAsync(apiUrl);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string json = await response.Content.ReadAsStringAsync();
-
-                        dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-                        string main = data.weather[0].main;
-                        string description = data.weather[0].description;
-                        double temp = data.main.temp;
-                        double temp_min = data.main.temp_min;
-
-                        return $"Main: {main}, Description: {description}, Temp: {temp}, Temp_min: {temp_min}";
-                    }
-                    else
-                    {
-                        // Handle the case where the API request was not successful
-                        return "Unable to fetch weather data.";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Handle any exception that occurred during the API request
-                    return $"An error occurred: {ex.Message}";
-                }
-            }
-        }
+    
         private async void Form1_Load(object sender, EventArgs e)
         {
             ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . thank you");
@@ -1127,84 +1005,8 @@ namespace ArsClientII
             waveOutEvent.Dispose();
             _context.Dispose();
         }
-        public void RemoveAllFilesInDirectory(string path)
-
-        {
-            // List<string> FailedfILEToDelete = new List<string>();
-
-            try
-            {
-                // Get the list of files in the specified directory
-                // string[] files = Directory.GetFiles(path);
-
-                foreach (string file in Directory.GetFiles(path))
-                {
-                    try
-                    {
-                        File.Delete(file);
-                        richTextBox1.Text = file;
-                    }
-                    catch (IOException)
-                    {
-
-                    }
-                }
-
-                foreach (string subDirectory in Directory.GetDirectories(path))
-                {
-                    try
-                    {
-                        RemoveAllFilesInDirectory(subDirectory); // Recursively remove subdirectory contents
-                        Directory.Delete(subDirectory); // Remove the empty directory
-                    }
-                    catch (IOException)
-                    {
-
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Console.WriteLine($"An error occurred while removing files: {ex.Message}");
-
-            }
-        }
-        public async Task<int> CleanUpPrefetch(string path)
-        {
-            try
-            {
-                foreach (string file in Directory.GetFiles(path))
-                {
-                    try
-                    {
-                        File.Delete(file);
-                        richTextBox1.AppendText(file);
-                    }
-                    catch (IOException Ex)
-                    {
-                        richTextBox1.AppendText($"{Ex.Message}");
-                    }
-                }
-                foreach (string subDirectory in Directory.GetDirectories(path))
-                {
-                    try
-                    {
-                        RemoveAllFilesInDirectory(subDirectory); // Recursively remove subdirectory contents
-                        Directory.Delete(subDirectory); // Remove the empty directory
-                    }
-                    catch (IOException)
-                    {
-
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Console.WriteLine($"An error occurred while removing files: {ex.Message}");
-
-            }
-            return 0;
-        }
+       
+       
         private void label15_Click(object sender, EventArgs e)
         {
 
