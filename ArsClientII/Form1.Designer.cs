@@ -55,6 +55,7 @@
             label9 = new Label();
             label4 = new Label();
             label5 = new Label();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             tabPage3.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -301,12 +302,22 @@
             label5.TabIndex = 19;
             label5.Text = "label5";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(334, 15);
+            label6.Name = "label6";
+            label6.Size = new Size(212, 15);
+            label6.TabIndex = 20;
+            label6.Text = "Bitcoin Moving Averages 100 & 200 Days";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1260, 432);
+            Controls.Add(label6);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label9);
@@ -360,5 +371,6 @@
         private Label label8;
         private Label label5;
         private Label label4;
+        private Label label6;
     }
 }

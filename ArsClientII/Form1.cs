@@ -872,54 +872,53 @@ namespace ArsClientII
                             var xx = Finalmoving;
                             var lllast = Math.Round(xx);
 
-                            richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast}{Environment.NewLine}");
+                            richTextBox1.AppendText($" Movig Avegarge 100 Days Informtion : {Environment.NewLine}");
 
                             //  string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
                             int timeIntervalInMinutes = 15;
                             decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
-                            richTextBox1.AppendText(movingAverage.ToString("F3"));
+                            richTextBox1.AppendText($" Moving Average 100 Time Frame 15 Minutes {movingAverage.ToString("F3")} {Environment.NewLine}");
                             label22.Text = movingAverage.ToString("F3");
 
 
-
+                            //Moving Global 100 Days Base
                             var Finalmoving200 = await CalculateMovingAverage(apiUrl);
                             var xxx = Finalmoving200;
                             var lllast2 = Math.Round(xxx);
 
-                            richTextBox1.AppendText($" Movig Avegarge 100 Days : {lllast2}{Environment.NewLine}");
+                            richTextBox1.AppendText($" Movig Avegarge 100 Days Global: {lllast2}{Environment.NewLine}");
 
+
+                            /*Moving 100days Time Frame 5 min*/
                             int timeIntervalInMinutes5 = 5;
                             decimal movingAverage5 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes5);
-                            richTextBox1.AppendText(movingAverage5.ToString("F3"));
+                            richTextBox1.AppendText($" Moving Average 100 Time Frame 5 Minutes {movingAverage5.ToString("F3")} {Environment.NewLine}");
                             label21.Text = movingAverage5.ToString("F3");
-
+                            /*Moving 100 1H*/
                             int timeIntervalInMinutes60 = 60;
                             decimal movingAverage60 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes60);
-                            richTextBox1.AppendText(movingAverage60.ToString("F3"));
+                            richTextBox1.AppendText($" Moving Average 100 Time Frame 1 Hour {movingAverage60.ToString("F3")} {Environment.NewLine}");
                             label3.Text = movingAverage60.ToString("F3");
 
 
                             /**********************************************/
-
+                            /*Moving 200Start 5 Min*/
                             string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
                             int timeIntervalInMinutes2005 = 5;
                             decimal movingAverage2005 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes2005);
-                            richTextBox1.AppendText(movingAverage2005.ToString("F3"));
+                           
                             label9.Text = movingAverage2005.ToString("F3");
-                            richTextBox1.AppendText($" Movig Avegarge 100 Days : {movingAverage2005.ToString("F3")}{Environment.NewLine}");
+                            richTextBox1.AppendText($" Movig Avegarge 200 Days Time Frame 5 Minutes : {movingAverage2005.ToString("F3")}{Environment.NewLine}");
 
 
 
-
+                            /*Moving Average 200 15 minutes*/
                             int timeIntervalInMinutes20015 = 15;
                             decimal movingAverage20015 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes20015);
-                            richTextBox1.AppendText(movingAverage20015.ToString("F3"));
+                            richTextBox1.AppendText($" Moving Average 200 Time Frame 15 Minutes {movingAverage20015.ToString("F3")} {Environment.NewLine}");
                             label5.Text = movingAverage20015.ToString("F3");
 
-
-
-
-                            ReadText($"Moving Averages  Moving Average 200 Days , % minutes is: {movingAverage2005.ToString("F3")} . 200 Days 15 minutes is:{movingAverage20015.ToString("F3")}");
+                            ReadText($"Moving Average 100 days 5 minutes is {movingAverage5.ToString("F3")},Moving Average 100 days 15 minutes is {movingAverage.ToString("F3")},Moving Average 100 days 1 Hour is {movingAverage60.ToString("F3")},Moving Average 200 days 5 Hour is {movingAverage2005.ToString("F3")},Moving Average 200 days 15 Hour is {movingAverage20015.ToString("F3")}");
                         }
                         if (e.Result.Text.ToLower() == "number 2")
                         {
