@@ -22,6 +22,8 @@ namespace ArsClientII
         string path = @"C:\Users\Armin\AppData\Local\Temp";
         string Prefetchpath = @"C:\Windows\Prefetch";
         string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+        string apiUrl100 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+        string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
         Color colorIncrease = Color.Green;
         Color colorDecrease = Color.Red;
         decimal previousPrice;
@@ -47,44 +49,85 @@ namespace ArsClientII
             _HelperMethods = new HelpersMethods();
         }
 
-
-        public async Task<string> StartTrade()
+        /*
+        public async Task StartTrade()
         {
+            /*
             decimal MovvingAverage200DailyCandle = 0;
             decimal MovvingAverage100DailyCandle = 0;
+
+            decimal MovvingAverage200TimeFrame4Hour = 0;
+            decimal MovvingAverage100TimeFrame4Hour = 0;
 
             decimal MovvingAverage200TimeFrame1Hour = 0;
             decimal MovvingAverage100TimeFrame1Hour = 0;
 
+            decimal MovvingAverage200TimeFrame15Min = 0;
+            decimal MovvingAverage100TimeFrame15Min = 0;
 
-            string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
-            MovvingAverage200DailyCandle = await CalculateMovingAverage(apiUrl200, 1440);
+            int MovingAverageDays200 = 200;
+            int MovingAverageDays100 = 100;
+            
+            string CurrencyName = "bitcoin";
+            string CCallBitcoin = await GetBinancePrice("BTCUSD");
+       
 
-            string apiUrl100 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-            MovvingAverage100DailyCandle = await CalculateMovingAverage(apiUrl100, 1440);
+            decimal movingAverage200Daily = await CalculateMovingAverage(apiUrl200, 1440);
+
+            decimal MovvingAverage100DailyCandle = await CalculateMovingAverage(apiUrl100, 1440);
+
+            //  string apiUrl200 = $"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
+            // string apiUrl100 = $"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+            
+             MovvingAverage200DailyCandle = await CalculateMovingAverage(apiUrl200, 1440);
+             MovvingAverage100DailyCandle = await CalculateMovingAverage(apiUrl100, 1440);
+
+             MovvingAverage100TimeFrame1Hour = await CalculateMovingAverage(apiUrl200,60);
+             MovvingAverage200TimeFrame1Hour = await CalculateMovingAverage(apiUrl100, 60);
+
+             MovvingAverage100TimeFrame15Min = await CalculateMovingAverage(apiUrl200, 15);
+             MovvingAverage200TimeFrame15Min = await CalculateMovingAverage(apiUrl100, 15);
+
+             MovvingAverage200TimeFrame4Hour = await CalculateMovingAverage(apiUrl200, 240);
+             MovvingAverage100TimeFrame4Hour= await CalculateMovingAverage(apiUrl100, 240);
+
+             //Moving 20015 min border line 
+
+             if(LastBTCPRIce < MovvingAverage200TimeFrame15Min && LastBTCPRIce > MovvingAverage100TimeFrame15Min)
+             {
+                 //if price between 2 moving averge is then i wil see where exactly it more than 50 % or less then check if 
+                 // position lost what is loss
+
+                 var MycurrentPositionTo200Line = MovvingAverage200TimeFrame15Min - LastBTCPRIce;
+                 var MycurrentPositionTo100Line = MovvingAverage100TimeFrame15Min - LastBTCPRIce;
 
 
-            MovvingAverage100TimeFrame1Hour = await CalculateMovingAverage(apiUrl200,60);
-            MovvingAverage200TimeFrame1Hour = await CalculateMovingAverage(apiUrl200, 60);
+             }
+             
 
 
 
+       
+        }
+            
+        */
 
 
-            label9.Text = MovvingAverage200DailyCandle.ToString("F3");
+        public async Task<string> TestStrartTrade()
+        {
+            int timeIntervalInMinutes = 15;
+            decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
+            richTextBox1.AppendText($" Moving Average 100 Time Frame 15 Minutes {movingAverage.ToString("F3")} {Environment.NewLine}");
+            label22.Text = movingAverage.ToString("F3");
+            return movingAverage.ToString("F3");
         }
 
 
-
-
-
-
-
-        static async Task<decimal> CalculateMovingAverage(string apiUrl, int timeIntervalInMinutes)
+        static async Task<decimal> CalculateMovingAverage(string apiUrl0, int timeIntervalInMinutes)
         {
             using (HttpClient client = new HttpClient())
             {
-                string response = await client.GetStringAsync(apiUrl);
+                string response = await client.GetStringAsync(apiUrl0);
                 CoinGeckoResponse data = JsonConvert.DeserializeObject<CoinGeckoResponse>(response);
 
                 // Assuming data.Prices is an array of [timestamp, price]
@@ -1041,10 +1084,10 @@ namespace ArsClientII
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            //ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . Please do not forget 3 things ,number 1: Risk Management .number 2:Stop Loss and Take Profit.number 3:Love Peace Freedom");
+            // ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . Please do not forget 3 things ,number 1: Risk Management .number 2:Stop Loss and Take Profit.number 3:Love Peace Freedom");
 
 
-
+            await TestStrartTrade();
         }
 
 
