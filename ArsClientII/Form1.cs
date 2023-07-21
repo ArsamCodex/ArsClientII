@@ -228,7 +228,7 @@ namespace ArsClientII
 
         private void button9_Click(object sender, EventArgs e)
         {
-            DiskPartManager(textBox1.Text, textBox2.Text);
+            //DiskPartManager(textBox1.Text, textBox2.Text);
         }
      
 
@@ -327,7 +327,7 @@ namespace ArsClientII
         {
             string mainText = "Voice Command Activated . . .";
             ReadText($"Voice Command Activated . I am  listening . Today Is:  {DateTime.Now.Date} ");
-            label15.Text = mainText;
+            
             // Set the input language to English
             recognizer.SetInputToDefaultAudioDevice();
             // Define grammar choices
@@ -575,16 +575,16 @@ namespace ArsClientII
 
                         if (e.Result.Text.ToLower() == "cleaning")
                         {
-                            await CleanUpPrefetch(path);
+                           // await CleanUpPrefetch(path);
 
                             richTextBox1.AppendText("Cleaning dine Done");
                             ReadText("Pc Cleaning Operation Done , Stand By");
                         }
                         if (e.Result.Text.ToLower() == "pedarsag")
                         {
-                            var cpuTemperature = await GetCpuTemperature();
-                            var x = cpuTemperature.ToString();
-                            richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}{Environment.NewLine}");
+                           // var cpuTemperature = await GetCpuTemperature();
+                           // var x = cpuTemperature.ToString();
+                            //richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}{Environment.NewLine}");
                         }
                         if (e.Result.Text.ToLower().Contains("shadow") || e.Result.Text.ToLower().Contains("stranger")
                         || e.Result.Text.ToLower().Contains("guest"))
@@ -740,16 +740,25 @@ namespace ArsClientII
                             var CkeckOlderData = Conn.CoinAnalysis.ToList();
                             var OneHoUREeARLIER = DateTime.Now.AddHours(-1).Hour;
 
-                            var MyCOmpektedata = CkeckOlderData
-                                 .Where(c => c.Date?.Hour == OneHoUREeARLIER)
-                                 .Select(c => c.Price);
+                            double percentageChange = 0;
+                            try
+                            {
+                                var MyCOmpektedata = CkeckOlderData
+                                     .Where(c => c.Date?.Hour == OneHoUREeARLIER)
+                                     .Select(c => c.Price);
 
-                            double oldprice = (double)MyCOmpektedata.FirstOrDefault();
-                            var xxc = (xx - oldprice) * 100;
-                            double percentageChange = ((xx - oldprice) / Math.Abs(oldprice)) * 100;
-                            richTextBox1.AppendText($"Precentagr Change %{percentageChange.ToString("F3")}{Environment.NewLine}");
-                            ReadText($"Compair To 1 Hour Past is ,{percentageChange.ToString("F3")}");
-                            Conn.Dispose();
+                                double oldprice = (double)MyCOmpektedata.FirstOrDefault();
+                                var xxc = (xx - oldprice) * 100;
+                                 percentageChange = ((xx - oldprice) / Math.Abs(oldprice)) * 100;
+                            }catch(Exception ex)
+                            {
+                                richTextBox1.AppendText($"No Older Data To Compaire .Come Back In Hour. ");
+
+                            }
+                                richTextBox1.AppendText($"Precentagr Change %{percentageChange.ToString("F3")}{Environment.NewLine}");
+                                ReadText($"Compair To 1 Hour Past is ,{percentageChange.ToString("F3")}");
+                                Conn.Dispose();
+                            
                         }
                         if (e.Result.Text.ToLower() == "what is news")
                         {
