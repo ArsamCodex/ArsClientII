@@ -329,6 +329,7 @@ namespace ArsClientII
         private async void tabPage3_Click(object sender, EventArgs e)
         {
             string mainText = "Voice Command Activated . . .";
+            label7.Text = mainText;
             ReadText($"Voice Command Activated . I am  listening . Today Is:  {DateTime.Now.Date} ");
 
             // Set the input language to English
@@ -519,7 +520,7 @@ namespace ArsClientII
   "track 1", "50", "Tatal", "you are my lovely client", "thanks", "fifty", "number fifty",
   "hey shadow i introduce you my guest", "guest", "hey this is stranger", "stranger", "this is my guest", "shadow", "hey shadow",
   "thank you", "goriz", "coingraph", "CryptoNews", "naaz", "Tupac", "crypto daily", "number 6", "pac",
-  "tupac", "Tupac", "Pocheel", "number 4", "number 7");
+  "tupac", "Tupac", "Pocheel", "number 4", "number 7", "Tomeh", "vay", "Amir");
 
 
             // Create a grammar from the choices
@@ -824,6 +825,10 @@ namespace ArsClientII
 
                             ReadText($"you are welcome");
                         }
+
+
+
+
                         if (e.Result.Text.ToLower() == "number 6")
                         {
 
@@ -965,6 +970,11 @@ namespace ArsClientII
                     ReadText($"Music by  : Moshsen Chaavoshi.   Song name: Naaz, ");
                     await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\chavoshi-naz.mp3");
                     break;
+                case "Amir":
+                    ReadText($"Music by  : Tataloo and Tomeh.   Song name: Vay ke che halie, ");
+                    await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\Tomeh.mp3");
+                    break;
+
                 case "number 4":
                     await PlayMusicAsync("C:\\Users\\ArsaM\\Desktop\\AudioDownloaded\\Pochil.mp3");
                     break;
@@ -1072,8 +1082,18 @@ namespace ArsClientII
             webView21.Source = new Uri("https://www.tradingview.com/widgetembed/?frameElementId=tradingview_cc58a&symbol=BITSTAMP%3ABTCUSD&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=exchange");
 
         }
+
+        private void label21_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
     }
-    
+
     public class CoinGeckoResponse
     {
         [JsonProperty("prices")]

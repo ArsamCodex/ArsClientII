@@ -38,6 +38,7 @@
             label21 = new Label();
             label22 = new Label();
             tabPage3 = new TabPage();
+            label7 = new Label();
             label16 = new Label();
             label15 = new Label();
             tabPage1 = new TabPage();
@@ -113,7 +114,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(137, 39);
+            label21.Location = new Point(123, 39);
             label21.Name = "label21";
             label21.Size = new Size(22, 15);
             label21.TabIndex = 9;
@@ -122,7 +123,7 @@
             // label22
             // 
             label22.AutoSize = true;
-            label22.Location = new Point(137, 77);
+            label22.Location = new Point(123, 77);
             label22.Name = "label22";
             label22.Size = new Size(22, 15);
             label22.TabIndex = 10;
@@ -130,6 +131,7 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(label7);
             tabPage3.Controls.Add(label16);
             tabPage3.Controls.Add(label15);
             tabPage3.Location = new Point(4, 24);
@@ -140,6 +142,16 @@
             tabPage3.Text = "Vocie";
             tabPage3.UseVisualStyleBackColor = true;
             tabPage3.Click += tabPage3_Click;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(51, 39);
+            label7.Name = "label7";
+            label7.Size = new Size(70, 15);
+            label7.TabIndex = 2;
+            label7.Text = "                     ";
+            label7.Click += label7_Click;
             // 
             // label16
             // 
@@ -264,7 +276,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(137, 111);
+            label3.Location = new Point(123, 111);
             label3.Name = "label3";
             label3.Size = new Size(22, 15);
             label3.TabIndex = 11;
@@ -273,7 +285,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(189, 39);
+            label8.Location = new Point(182, 39);
             label8.Name = "label8";
             label8.Size = new Size(74, 15);
             label8.TabIndex = 16;
@@ -282,7 +294,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(372, 39);
+            label9.Location = new Point(295, 39);
             label9.Name = "label9";
             label9.Size = new Size(22, 15);
             label9.TabIndex = 17;
@@ -291,7 +303,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(189, 77);
+            label4.Location = new Point(182, 77);
             label4.Name = "label4";
             label4.Size = new Size(87, 15);
             label4.TabIndex = 18;
@@ -301,7 +313,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(372, 77);
+            label5.Location = new Point(305, 77);
             label5.Name = "label5";
             label5.Size = new Size(22, 15);
             label5.TabIndex = 19;
@@ -319,9 +331,9 @@
             groupBox1.Controls.Add(label8);
             groupBox1.Controls.Add(label20);
             groupBox1.Controls.Add(label3);
-            groupBox1.Location = new Point(334, 36);
+            groupBox1.Location = new Point(334, 33);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(343, 155);
+            groupBox1.Size = new Size(367, 158);
             groupBox1.TabIndex = 21;
             groupBox1.TabStop = false;
             groupBox1.Text = "Bitcoin Moving Averages 100 & 200 Days";
@@ -332,18 +344,18 @@
             label6.AutoSize = true;
             label6.Location = new Point(639, 15);
             label6.Name = "label6";
-            label6.Size = new Size(38, 15);
+            label6.Size = new Size(48, 15);
             label6.TabIndex = 22;
-            label6.Text = "label6";
+            label6.Text = "Balance";
             // 
             // webView21
             // 
             webView21.AllowExternalDrop = true;
             webView21.CreationProperties = null;
             webView21.DefaultBackgroundColor = Color.White;
-            webView21.Location = new Point(683, 36);
+            webView21.Location = new Point(707, 12);
             webView21.Name = "webView21";
-            webView21.Size = new Size(429, 305);
+            webView21.Size = new Size(405, 329);
             webView21.TabIndex = 23;
             webView21.ZoomFactor = 1D;
             webView21.Click += webView21_Click;
@@ -352,7 +364,7 @@
             // 
             button1.Location = new Point(335, 202);
             button1.Name = "button1";
-            button1.Size = new Size(342, 23);
+            button1.Size = new Size(366, 23);
             button1.TabIndex = 24;
             button1.Text = "BTC CHart";
             button1.UseVisualStyleBackColor = true;
@@ -418,5 +430,6 @@
         private Label label6;
         private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
         private Button button1;
+        private Label label7;
     }
 }
