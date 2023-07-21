@@ -15,6 +15,8 @@ namespace ArsClientII
         public DateTime? BougtDate { get; set; }
         public DateTime? SoldDate { get; set; }
         public bool IsTradeCompleted { get; set; }
+        public double? WinPosition { get; set; }
+        public double? LossPosition { get; set; }
 
     }
     

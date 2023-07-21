@@ -12,19 +12,7 @@ using System.Runtime.InteropServices;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
 using AngleSharp.Text;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Diagnostics.Metrics;
-using System.Numerics;
-using System.Text;
-using System.Net;
-using Microsoft.VisualBasic.ApplicationServices;
-using HtmlAgilityPack;
-using System.Security.Cryptography;
-using System.Net.Http;
-using System;
-using System.Windows.Forms;
-using HtmlDocument = HtmlAgilityPack.HtmlDocument;
-using Microsoft.Web.WebView2.WinForms;
+
 
 namespace ArsClientII
 {
@@ -45,9 +33,7 @@ namespace ArsClientII
         SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
         private OkexApiClient _okexApiClient;
         private WetherClient _wether;
-        private const string ApiKey = "fcf7293a-dc47-4b54-8ceb-deaedbb7f7d7";
-        private const string SecretKey = "6364844206A41E7F389C365C9480211E";
-        private const string BaseUrl = "https://www.okex.com";
+    
         string FrenchTranslated;
         public System.Windows.Forms.Timer timer;
         private HelpersMethods _HelperMethods;
@@ -60,6 +46,40 @@ namespace ArsClientII
             _wether = new WetherClient();
             _HelperMethods = new HelpersMethods();
         }
+
+
+        public async Task<string> StartTrade()
+        {
+            decimal MovvingAverage200DailyCandle = 0;
+            decimal MovvingAverage100DailyCandle = 0;
+
+            decimal MovvingAverage200TimeFrame1Hour = 0;
+            decimal MovvingAverage100TimeFrame1Hour = 0;
+
+
+            string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
+            MovvingAverage200DailyCandle = await CalculateMovingAverage(apiUrl200, 1440);
+
+            string apiUrl100 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+            MovvingAverage100DailyCandle = await CalculateMovingAverage(apiUrl100, 1440);
+
+
+            MovvingAverage100TimeFrame1Hour = await CalculateMovingAverage(apiUrl200,60);
+            MovvingAverage200TimeFrame1Hour = await CalculateMovingAverage(apiUrl200, 60);
+
+
+
+
+
+            label9.Text = MovvingAverage200DailyCandle.ToString("F3");
+        }
+
+
+
+
+
+
+
         static async Task<decimal> CalculateMovingAverage(string apiUrl, int timeIntervalInMinutes)
         {
             using (HttpClient client = new HttpClient())
