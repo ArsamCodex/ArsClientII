@@ -56,19 +56,23 @@
             label4 = new Label();
             label5 = new Label();
             groupBox1 = new GroupBox();
+            label6 = new Label();
+            webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             tabPage3.SuspendLayout();
             tabPage1.SuspendLayout();
             tabControl1.SuspendLayout();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             SuspendLayout();
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(851, 12);
+            richTextBox1.Location = new Point(1118, 12);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.ScrollBars = RichTextBoxScrollBars.Horizontal;
-            richTextBox1.Size = new Size(397, 379);
+            richTextBox1.Size = new Size(130, 329);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -269,7 +273,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(235, 39);
+            label8.Location = new Point(189, 39);
             label8.Name = "label8";
             label8.Size = new Size(74, 15);
             label8.TabIndex = 16;
@@ -287,7 +291,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(235, 77);
+            label4.Location = new Point(189, 77);
             label4.Name = "label4";
             label4.Size = new Size(87, 15);
             label4.TabIndex = 18;
@@ -317,11 +321,42 @@
             groupBox1.Controls.Add(label3);
             groupBox1.Location = new Point(334, 36);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(511, 255);
+            groupBox1.Size = new Size(343, 155);
             groupBox1.TabIndex = 21;
             groupBox1.TabStop = false;
             groupBox1.Text = "Bitcoin Moving Averages 100 & 200 Days";
             groupBox1.Enter += groupBox1_Enter_1;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(639, 15);
+            label6.Name = "label6";
+            label6.Size = new Size(38, 15);
+            label6.TabIndex = 22;
+            label6.Text = "label6";
+            // 
+            // webView21
+            // 
+            webView21.AllowExternalDrop = true;
+            webView21.CreationProperties = null;
+            webView21.DefaultBackgroundColor = Color.White;
+            webView21.Location = new Point(683, 36);
+            webView21.Name = "webView21";
+            webView21.Size = new Size(429, 305);
+            webView21.TabIndex = 23;
+            webView21.ZoomFactor = 1D;
+            webView21.Click += webView21_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(335, 202);
+            button1.Name = "button1";
+            button1.Size = new Size(342, 23);
+            button1.TabIndex = 24;
+            button1.Text = "BTC CHart";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // Form1
             // 
@@ -329,6 +364,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1260, 432);
+            Controls.Add(button1);
+            Controls.Add(webView21);
+            Controls.Add(label6);
             Controls.Add(groupBox1);
             Controls.Add(tabControl1);
             Controls.Add(richTextBox1);
@@ -345,7 +383,9 @@
             tabControl1.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)webView21).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -375,5 +415,8 @@
         private Label label5;
         private Label label4;
         private GroupBox groupBox1;
+        private Label label6;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
+        private Button button1;
     }
 }

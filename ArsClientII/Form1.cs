@@ -22,6 +22,9 @@ using HtmlAgilityPack;
 using System.Security.Cryptography;
 using System.Net.Http;
 using System;
+using System.Windows.Forms;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
+using Microsoft.Web.WebView2.WinForms;
 
 namespace ArsClientII
 {
@@ -48,7 +51,7 @@ namespace ArsClientII
         string FrenchTranslated;
         public System.Windows.Forms.Timer timer;
         private HelpersMethods _HelperMethods;
-       
+
         public Form1()
         {
             InitializeComponent();
@@ -144,7 +147,7 @@ namespace ArsClientII
             _HelperMethods.ConvertJpgToIcon(jpgFilePath, icoFilePath);
             richTextBox1.AppendText("ICO Extention Done");
         }
-      
+
         private void button7_Click(object sender, EventArgs e)
         {
             try
@@ -224,13 +227,13 @@ namespace ArsClientII
                 return movingAverage;
             }
         }
-       
+
 
         private void button9_Click(object sender, EventArgs e)
         {
             //DiskPartManager(textBox1.Text, textBox2.Text);
         }
-     
+
 
         private async Task<List<string>> GetH3Headers(string url)
         {
@@ -327,7 +330,7 @@ namespace ArsClientII
         {
             string mainText = "Voice Command Activated . . .";
             ReadText($"Voice Command Activated . I am  listening . Today Is:  {DateTime.Now.Date} ");
-            
+
             // Set the input language to English
             recognizer.SetInputToDefaultAudioDevice();
             // Define grammar choices
@@ -516,7 +519,7 @@ namespace ArsClientII
   "track 1", "50", "Tatal", "you are my lovely client", "thanks", "fifty", "number fifty",
   "hey shadow i introduce you my guest", "guest", "hey this is stranger", "stranger", "this is my guest", "shadow", "hey shadow",
   "thank you", "goriz", "coingraph", "CryptoNews", "naaz", "Tupac", "crypto daily", "number 6", "pac",
-  "tupac", "Tupac", "Pocheel", "number 4");
+  "tupac", "Tupac", "Pocheel", "number 4", "number 7");
 
 
             // Create a grammar from the choices
@@ -528,7 +531,7 @@ namespace ArsClientII
             recognizer.RecognizeAsync(RecognizeMode.Multiple);
 
             //Console.WriteLine("Speak something...");
-            richTextBox1.AppendText($"Say Somethign{Environment.NewLine}");
+            // richTextBox1.AppendText($"Say Somethign{Environment.NewLine}");
 
             // Handle speech recognition events
             recognizer.SpeechRecognized += async (sender, e) =>
@@ -575,15 +578,15 @@ namespace ArsClientII
 
                         if (e.Result.Text.ToLower() == "cleaning")
                         {
-                           // await CleanUpPrefetch(path);
+                            // await CleanUpPrefetch(path);
 
                             richTextBox1.AppendText("Cleaning dine Done");
                             ReadText("Pc Cleaning Operation Done , Stand By");
                         }
                         if (e.Result.Text.ToLower() == "pedarsag")
                         {
-                           // var cpuTemperature = await GetCpuTemperature();
-                           // var x = cpuTemperature.ToString();
+                            // var cpuTemperature = await GetCpuTemperature();
+                            // var x = cpuTemperature.ToString();
                             //richTextBox1.AppendText($"Tempreture is {GetCpuTemperature().Result}{Environment.NewLine}");
                         }
                         if (e.Result.Text.ToLower().Contains("shadow") || e.Result.Text.ToLower().Contains("stranger")
@@ -749,16 +752,17 @@ namespace ArsClientII
 
                                 double oldprice = (double)MyCOmpektedata.FirstOrDefault();
                                 var xxc = (xx - oldprice) * 100;
-                                 percentageChange = ((xx - oldprice) / Math.Abs(oldprice)) * 100;
-                            }catch(Exception ex)
+                                percentageChange = ((xx - oldprice) / Math.Abs(oldprice)) * 100;
+                            }
+                            catch (Exception ex)
                             {
                                 richTextBox1.AppendText($"No Older Data To Compaire .Come Back In Hour. ");
 
                             }
-                                richTextBox1.AppendText($"Precentagr Change %{percentageChange.ToString("F3")}{Environment.NewLine}");
-                                ReadText($"Compair To 1 Hour Past is ,{percentageChange.ToString("F3")}");
-                                Conn.Dispose();
-                            
+                            richTextBox1.AppendText($"Precentagr Change %{percentageChange.ToString("F3")}{Environment.NewLine}");
+                            ReadText($"Compair To 1 Hour Past is ,{percentageChange.ToString("F3")}");
+                            Conn.Dispose();
+
                         }
                         if (e.Result.Text.ToLower() == "what is news")
                         {
@@ -785,6 +789,18 @@ namespace ArsClientII
                                 ReadText($"{richTextBox1.Text}");
                             }
                         }
+
+                        if (e.Result.Text.ToLower() == "number 7")
+                        {
+                            await webView21.EnsureCoreWebView2Async(null);
+
+                            // Set the URL of the WebView2 control to the TradingView BTC chart widget URL.
+                            webView21.Source = new Uri("https://www.tradingview.com/widgetembed/?frameElementId=tradingview_cc58a&symbol=BITSTAMP%3ABTCUSD&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=exchange");
+
+
+                        }
+
+
 
                         if (e.Result.Text.ToLower() == "crypto daily")
                         {
@@ -992,11 +1008,17 @@ namespace ArsClientII
                 //  Console.WriteLine("An error occurred while playing the music: " + ex.Message);
             }
         }
-    
+
         private async void Form1_Load(object sender, EventArgs e)
         {
-            ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . thank you");
+            //ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . Please do not forget 3 things ,number 1: Risk Management .number 2:Stop Loss and Take Profit.number 3:Love Peace Freedom");
+
+
+
         }
+
+
+
         public void StopMusic()
         {
             waveOutEvent?.Stop();
@@ -1014,8 +1036,8 @@ namespace ArsClientII
             waveOutEvent.Dispose();
             _context.Dispose();
         }
-       
-       
+
+
         private void label15_Click(object sender, EventArgs e)
         {
 
@@ -1036,7 +1058,22 @@ namespace ArsClientII
         {
 
         }
+
+        private void webView21_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            await webView21.EnsureCoreWebView2Async(null);
+
+            // Set the URL of the WebView2 control to the TradingView BTC chart widget URL.
+            webView21.Source = new Uri("https://www.tradingview.com/widgetembed/?frameElementId=tradingview_cc58a&symbol=BITSTAMP%3ABTCUSD&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=exchange");
+
+        }
     }
+    
     public class CoinGeckoResponse
     {
         [JsonProperty("prices")]
