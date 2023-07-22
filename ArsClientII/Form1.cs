@@ -952,8 +952,11 @@ namespace ArsClientII
           
             var x = await _okexApiClient.GetAllAssetsAsync();
 
-           // richTextBox1.AppendText(x.Count().ToString());          
-           // ReadText($" Bitcoin Balance Is : Test , " );*/
+            foreach(var xx in x)
+            {
+                richTextBox1.AppendText(xx.Ccy);
+                richTextBox1.AppendText(xx.AvailEq);
+            }
         }
 
 
