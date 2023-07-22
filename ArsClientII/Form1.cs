@@ -21,9 +21,8 @@ namespace ArsClientII
 
         string path = @"C:\Users\Armin\AppData\Local\Temp";
         string Prefetchpath = @"C:\Windows\Prefetch";
-        string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-        string apiUrl100 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-        string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
+       // string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+      //  string apiUrl2000 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
         Color colorIncrease = Color.Green;
         Color colorDecrease = Color.Red;
         decimal previousPrice;
@@ -35,10 +34,11 @@ namespace ArsClientII
         SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine();
         private OkexApiClient _okexApiClient;
         private WetherClient _wether;
-    
+
         string FrenchTranslated;
         public System.Windows.Forms.Timer timer;
         private HelpersMethods _HelperMethods;
+        public TraderMethodHelper _traderMethodHelper;
 
         public Form1()
         {
@@ -47,130 +47,13 @@ namespace ArsClientII
             _context = new ApplicationDbContext();
             _wether = new WetherClient();
             _HelperMethods = new HelpersMethods();
+            _traderMethodHelper = new TraderMethodHelper();
         }
 
-        /*
-        public async Task StartTrade()
-        {
-            /*
-            decimal MovvingAverage200DailyCandle = 0;
-            decimal MovvingAverage100DailyCandle = 0;
+ 
+      
 
-            decimal MovvingAverage200TimeFrame4Hour = 0;
-            decimal MovvingAverage100TimeFrame4Hour = 0;
-
-            decimal MovvingAverage200TimeFrame1Hour = 0;
-            decimal MovvingAverage100TimeFrame1Hour = 0;
-
-            decimal MovvingAverage200TimeFrame15Min = 0;
-            decimal MovvingAverage100TimeFrame15Min = 0;
-
-            int MovingAverageDays200 = 200;
-            int MovingAverageDays100 = 100;
-            
-            string CurrencyName = "bitcoin";
-            string CCallBitcoin = await GetBinancePrice("BTCUSD");
-       
-
-            decimal movingAverage200Daily = await CalculateMovingAverage(apiUrl200, 1440);
-
-            decimal MovvingAverage100DailyCandle = await CalculateMovingAverage(apiUrl100, 1440);
-
-            //  string apiUrl200 = $"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
-            // string apiUrl100 = $"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-            
-             MovvingAverage200DailyCandle = await CalculateMovingAverage(apiUrl200, 1440);
-             MovvingAverage100DailyCandle = await CalculateMovingAverage(apiUrl100, 1440);
-
-             MovvingAverage100TimeFrame1Hour = await CalculateMovingAverage(apiUrl200,60);
-             MovvingAverage200TimeFrame1Hour = await CalculateMovingAverage(apiUrl100, 60);
-
-             MovvingAverage100TimeFrame15Min = await CalculateMovingAverage(apiUrl200, 15);
-             MovvingAverage200TimeFrame15Min = await CalculateMovingAverage(apiUrl100, 15);
-
-             MovvingAverage200TimeFrame4Hour = await CalculateMovingAverage(apiUrl200, 240);
-             MovvingAverage100TimeFrame4Hour= await CalculateMovingAverage(apiUrl100, 240);
-
-             //Moving 20015 min border line 
-
-             if(LastBTCPRIce < MovvingAverage200TimeFrame15Min && LastBTCPRIce > MovvingAverage100TimeFrame15Min)
-             {
-                 //if price between 2 moving averge is then i wil see where exactly it more than 50 % or less then check if 
-                 // position lost what is loss
-
-                 var MycurrentPositionTo200Line = MovvingAverage200TimeFrame15Min - LastBTCPRIce;
-                 var MycurrentPositionTo100Line = MovvingAverage100TimeFrame15Min - LastBTCPRIce;
-
-
-             }
-             
-
-
-
-       
-        }
-            
-        */
-
-
-        public async Task<decimal> Get10015Min()
-        {
-            int timeIntervalInMinutes = 15;
-            decimal movingAverage = await CalculateMovingAverage(apiUrl100, timeIntervalInMinutes);
-            richTextBox1.AppendText($" Moving Average 100 Time Frame 15 Minutes {movingAverage.ToString("F3")} {Environment.NewLine}");
-            return movingAverage;
-        }
-
-
-        static async Task<decimal> CalculateMovingAverage(string apiUrl0, int timeIntervalInMinutes)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                string response = await client.GetStringAsync(apiUrl0);
-                CoinGeckoResponse data = JsonConvert.DeserializeObject<CoinGeckoResponse>(response);
-
-                // Assuming data.Prices is an array of [timestamp, price]
-                // Convert timestamp to DateTime and sort by timestamp
-                var sortedData = data.Prices
-                    .Select(p => new { TimeStamp = DateTimeOffset.FromUnixTimeMilliseconds((long)p[0]).UtcDateTime, Price = p[1] })
-                    .OrderBy(p => p.TimeStamp)
-                    .ToList();
-
-                // Calculate the number of data points within the desired time interval
-                int dataPointsWithinInterval = timeIntervalInMinutes / 5; // Assuming the API returns data every 5 minutes
-                if (dataPointsWithinInterval == 0)
-                {
-                    throw new ArgumentException("Time interval should be a multiple of 5 minutes.");
-                }
-
-                // Calculate the moving average for the given time interval
-                List<decimal> movingAverages = new List<decimal>();
-                decimal sum = 0;
-                for (int i = 0; i < sortedData.Count; i++)
-                {
-                    sum += sortedData[i].Price;
-
-                    // If the number of data points considered for the moving average equals the desired interval,
-                    // calculate and store the moving average for this interval
-                    if (i >= dataPointsWithinInterval - 1)
-                    {
-                        decimal movingAverage = sum / dataPointsWithinInterval;
-                        movingAverages.Add(movingAverage);
-
-                        // Move the window by removing the oldest data point
-                        sum -= sortedData[i - dataPointsWithinInterval + 1].Price;
-                    }
-                }
-
-                // The movingAverages list now contains the 15-minute moving averages for each interval in chronological order.
-                // You can use this data as needed.
-
-                // For example, if you want to get the most recent 15-minute moving average:
-                decimal last15MinMovingAverage = movingAverages.Last();
-
-                return last15MinMovingAverage;
-            }
-        }
+   
         public void Shutdown()
         {
             Process.Start("shutdown", "/s /t 0");
@@ -730,6 +613,7 @@ namespace ArsClientII
                         }
                         if (e.Result.Text.ToLower() == "100")
                         {
+                            /*
                             var Finalmoving = await CalculateMovingAverage(apiUrl);
                             var xx = Finalmoving;
                             var lllast = Math.Round(xx);
@@ -743,29 +627,20 @@ namespace ArsClientII
                             label22.Text = movingAverage.ToString("F3");
 
 
-                            //Moving Global 200 Days Base
-                            /*
-                            var Finalmoving200 = await CalculateMovingAverage(apiUrl);
-                            var xxx = Finalmoving200;
-                            var lllast2 = Math.Round(xxx);
 
-                            richTextBox1.AppendText($" Movig Avegarge 100 Days Global: {lllast2}{Environment.NewLine}");
-                            */
-
-                            /*Moving 100days Time Frame 5 min*/
                             int timeIntervalInMinutes5 = 5;
                             decimal movingAverage5 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes5);
                             richTextBox1.AppendText($" Moving Average 100 Time Frame 5 Minutes {movingAverage5.ToString("F3")} {Environment.NewLine}");
                             label21.Text = movingAverage5.ToString("F3");
-                            /*Moving 100 1H*/
+                         
+
+
                             int timeIntervalInMinutes60 = 60;
                             decimal movingAverage60 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes60);
                             richTextBox1.AppendText($" Moving Average 100 Time Frame 1 Hour {movingAverage60.ToString("F3")} {Environment.NewLine}");
                             label3.Text = movingAverage60.ToString("F3");
 
 
-                            /**********************************************/
-                            /*Moving 200Start 5 Min*/
                             string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
                             int timeIntervalInMinutes2005 = 5;
                             decimal movingAverage2005 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes2005);
@@ -775,13 +650,13 @@ namespace ArsClientII
 
 
 
-                            /*Moving Average 200 15 minutes*/
+                           
                             int timeIntervalInMinutes20015 = 15;
                             decimal movingAverage20015 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes20015);
                             richTextBox1.AppendText($" Moving Average 200 Time Frame 15 Minutes {movingAverage20015.ToString("F3")} {Environment.NewLine}");
                             label5.Text = movingAverage20015.ToString("F3");
-
-                            ReadText($"Moving Average 100 days 5 minutes is {movingAverage5.ToString("F3")},Moving Average 100 days 15 minutes is {movingAverage.ToString("F3")},Moving Average 100 days 1 Hour is {movingAverage60.ToString("F3")},Moving Average 200 days 5 Hour is {movingAverage2005.ToString("F3")},Moving Average 200 days 15 Hour is {movingAverage20015.ToString("F3")}");
+                            */
+                            //ReadText($"Moving Average 100 days 5 minutes is {movingAverage5.ToString("F3")},Moving Average 100 days 15 minutes is {movingAverage.ToString("F3")},Moving Average 100 days 1 Hour is {movingAverage60.ToString("F3")},Moving Average 200 days 5 Hour is {movingAverage2005.ToString("F3")},Moving Average 200 days 15 Hour is {movingAverage20015.ToString("F3")}");
                         }
                         if (e.Result.Text.ToLower() == "number 2")
                         {
@@ -1086,7 +961,6 @@ namespace ArsClientII
             // ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . Please do not forget 3 things ,number 1: Risk Management .number 2:Stop Loss and Take Profit.number 3:Love Peace Freedom");
 
 
-            await TestStrartTrade();
         }
 
 
