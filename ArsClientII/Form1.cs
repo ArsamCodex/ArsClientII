@@ -113,13 +113,12 @@ namespace ArsClientII
         */
 
 
-        public async Task<string> TestStrartTrade()
+        public async Task<decimal> Get10015Min()
         {
             int timeIntervalInMinutes = 15;
-            decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
+            decimal movingAverage = await CalculateMovingAverage(apiUrl100, timeIntervalInMinutes);
             richTextBox1.AppendText($" Moving Average 100 Time Frame 15 Minutes {movingAverage.ToString("F3")} {Environment.NewLine}");
-            label22.Text = movingAverage.ToString("F3");
-            return movingAverage.ToString("F3");
+            return movingAverage;
         }
 
 
