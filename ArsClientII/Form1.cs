@@ -50,18 +50,6 @@ namespace ArsClientII
             _traderMethodHelper = new TraderMethodHelper();
         }
 
- 
-      
-
-   
-        public void Shutdown()
-        {
-            Process.Start("shutdown", "/s /t 0");
-        }
-        public void Restart()
-        {
-            Process.Start("shutdown", "/r /t 0");
-        }
         private void tabPage1_Click(object sender, EventArgs e)
         {
 
@@ -960,7 +948,8 @@ namespace ArsClientII
         {
             // ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . Please do not forget 3 things ,number 1: Risk Management .number 2:Stop Loss and Take Profit.number 3:Love Peace Freedom");
 
-
+          var x=  await _okexApiClient.GetAssetsAsync();
+            ReadText($"Available Bitcoin Balance Is : {x}");
         }
 
 

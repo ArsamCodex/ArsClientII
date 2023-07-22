@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,9 +11,15 @@ namespace ArsClientII
 {
     public class TraderMethodHelper
     {
-        string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-        string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
+         static string currency = "bitcoin";
+        //in case of rare character
+        //string encodedCurrency = WebUtility.UrlEncode(currency);
 
+        string apiUrl = $"https://api.coingecko.com/api/v3/coins/{currency}/market_chart?vs_currency=usd&days=100";
+        string apiUrl200 = $"https://api.coingecko.com/api/v3/coins/{currency}/market_chart?vs_currency=usd&days=200";
+
+    
+        
 
         static async Task<decimal> CalculateMovingAverage(string apiUrl0, int timeIntervalInMinutes)
         {
