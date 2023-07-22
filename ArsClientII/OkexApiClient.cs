@@ -48,7 +48,7 @@ public class OkexApiClient
         request.Headers.Add("OK-ACCESS-KEY", ApiKey);
         request.Headers.Add("OK-ACCESS-SIGN", signature);
         request.Headers.Add("OK-ACCESS-TIMESTAMP", _timestamp);
-        request.Headers.Add("OK-ACCESS-PASSPHRASE", "Papa-557"); // Replace with your passphrase
+        request.Headers.Add("OK-ACCESS-PASSPHRASE", ""); // Replace with your passphrase
         request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
         return request;
