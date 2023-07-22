@@ -1,13 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using AngleSharp.Io;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 public class OkexApiClient
 {
-    private const string ApiKey = "";
-    private const string SecretKey = "";
+    private const string ApiKey = "0e1c5d11-31e0-409f-8ca1-5af536d9fe6e";
+    private const string SecretKey = "A8F847D914D512733B6C2B8A542AC5C2";
     private const string BaseUrl = "https://www.okex.com";
 
     private readonly HttpClient _httpClient;
@@ -42,7 +44,7 @@ public class OkexApiClient
     {
         var signature = GenerateSignature(method, requestPath, body);
 
-        var request = new HttpRequestMessage(new HttpMethod(method), requestPath);
+        var request = new HttpRequestMessage(new System.Net.Http.HttpMethod(method), requestPath);
         request.Headers.Add("OK-ACCESS-KEY", ApiKey);
         request.Headers.Add("OK-ACCESS-SIGN", signature);
         request.Headers.Add("OK-ACCESS-TIMESTAMP", _timestamp);
@@ -78,7 +80,7 @@ public class OkexApiClient
         _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-KEY", ApiKey);
         _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-SIGN", GenerateSignature("GET", endpoint)); // Use "GET" method for balance retrieval.
         _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-TIMESTAMP", _timestamp);
-        _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-PASSPHRASE","");
+        _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-PASSPHRASE", "Papa-557");
 
         var response = await _httpClient.GetAsync($"{BaseUrl}{endpoint}");
         response.EnsureSuccessStatusCode();
@@ -87,6 +89,47 @@ public class OkexApiClient
 
         return c;
 
+    }
+    public async Task<List<OkexAsset>> GetAllAssetsAsync()
+    {
+        try
+        {
+            var endpoint = "/api/v5/account/balance";
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-KEY", ApiKey);
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-SIGN", GenerateSignature("GET", endpoint));
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-TIMESTAMP", _timestamp);
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-PASSPHRASE", "Papa-557");
+
+            var response = await _httpClient.GetAsync($"{BaseUrl}{endpoint}");
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            DataObject dataObject = JsonConvert.DeserializeObject<DataObject>(responseContent);
+
+            List<OkexAsset> assets = new List<OkexAsset>();
+
+            foreach (var detail in dataObject.Data[0].Details)
+            {
+                assets.Add(new OkexAsset
+                {
+                    Ccy = detail.Ccy,
+                    AvailEq = detail.AvailEq
+                });
+            }
+
+            return assets;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error retrieving OKEx assets: " + ex.Message);
+        }
+    }
+
+    public static DataObject DeserializeJson(string jsonString)
+    {
+        return JsonConvert.DeserializeObject<DataObject>(jsonString);
     }
     private decimal ExtractBalance(string responseContent, string currency)
     {
@@ -149,15 +192,75 @@ public class OkexApiClient
 
     }
     */
-    public class OkexAsset
+    public class OkexAsset2
     {
         public string Currency { get; set; }
         public decimal TotalBalance { get; set; }
         public decimal AvailableBalance { get; set; }
     }
+
+
+    public class OkexAssetResponse
+    {
+        public string Code { get; set; }
+        public List<Dictionary<string, List<OkexAsset>>> Data { get; set; }
+    }
+
     public class OkexApiResponse
     {
         public bool Success { get; set; }
         public List<OkexAsset> Data { get; set; }
     }
+    public class OkexAsset
+    {
+        public string Ccy { get; set; }
+        public string AvailEq { get; set; }
+    }
+    public class DataObject
+    {
+        public string Code { get; set; }
+        public DataItem[] Data { get; set; }
+        public string Message { get; set; }
+    }
+    public class DataItem
+    {
+        public string Imr { get; set; }
+        public string IsoEq { get; set; }
+        public string MgnRatio { get; set; }
+        public string Mmr { get; set; }
+        public string NotionalUsd { get; set; }
+        public string OrdFroz { get; set; }
+        public string TotalEq { get; set; }
+        public string UTime { get; set; }
+        public Detail[] Details { get; set; }
+    }
+    public class Detail
+    {
+        public string AvailBal { get; set; }
+        public string AvailEq { get; set; }
+        public string CashBal { get; set; }
+        public string Ccy { get; set; }
+        public string CrossLiab { get; set; }
+        public string DisEq { get; set; }
+        public string Eq { get; set; }
+        public string EqUsd { get; set; }
+        public string FixedBal { get; set; }
+        public string FrozenBal { get; set; }
+        public string Interest { get; set; }
+        public string IsoEq { get; set; }
+        public string IsoLiab { get; set; }
+        public string IsoUpl { get; set; }
+        public string Liab { get; set; }
+        public string MaxLoan { get; set; }
+        public string MgnRatio { get; set; }
+        public string NotionalLever { get; set; }
+        public string OrdFrozen { get; set; }
+        public string SpotInUseAmt { get; set; }
+        public string StgyEq { get; set; }
+        public string Twap { get; set; }
+        public string UTime { get; set; }
+        public string Upl { get; set; }
+        public string UplLiab { get; set; }
+    }
+
 }
