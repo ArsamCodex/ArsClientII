@@ -8,8 +8,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 public class OkexApiClient
 {
-    private const string ApiKey = "0e1c5d11-31e0-409f-8ca1-5af536d9fe6e";
-    private const string SecretKey = "A8F847D914D512733B6C2B8A542AC5C2";
+    private const string ApiKey = "";
+    private const string SecretKey = "";
     private const string BaseUrl = "https://www.okex.com";
 
     private readonly HttpClient _httpClient;
@@ -80,7 +80,7 @@ public class OkexApiClient
         _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-KEY", ApiKey);
         _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-SIGN", GenerateSignature("GET", endpoint)); // Use "GET" method for balance retrieval.
         _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-TIMESTAMP", _timestamp);
-        _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-PASSPHRASE", "Papa-557");
+        _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-PASSPHRASE", "");
 
         var response = await _httpClient.GetAsync($"{BaseUrl}{endpoint}");
         response.EnsureSuccessStatusCode();
