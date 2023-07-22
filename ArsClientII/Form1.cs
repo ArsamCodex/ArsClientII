@@ -12,7 +12,9 @@ using System.Runtime.InteropServices;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
 using AngleSharp.Text;
-
+using static OkexApiClient;
+using Microsoft.VisualBasic.ApplicationServices;
+using System.Windows.Forms;
 
 namespace ArsClientII
 {
@@ -21,8 +23,8 @@ namespace ArsClientII
 
         string path = @"C:\Users\Armin\AppData\Local\Temp";
         string Prefetchpath = @"C:\Windows\Prefetch";
-       // string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-      //  string apiUrl2000 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
+        // string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
+        //  string apiUrl2000 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
         Color colorIncrease = Color.Green;
         Color colorDecrease = Color.Red;
         decimal previousPrice;
@@ -58,67 +60,10 @@ namespace ArsClientII
         {
 
         }
-        private async void button5_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(textBox1.Text))
-            {
-                errorProvider1.SetError(textBox1, "Please enter a value in textBox3.");
-            }
-            else
-            {
-                errorProvider1.Clear();
-
-                richTextBox1.Text = "Please Wait Until U get Done";
-                await _HelperMethods.DownloadAudioFromUrl(textBox1.Text, textBox2.Text);
-                richTextBox1.AppendText("File Downloaded Successfully. Operation Done!" + Environment.NewLine);
-            }
-        }
-        private void button6_Click(object sender, EventArgs e)
-        {
-            string jpgFilePath = textBox1.Text;
-            string icoFilePath = textBox2.Text;
-            _HelperMethods.ConvertJpgToIcon(jpgFilePath, icoFilePath);
-            richTextBox1.AppendText("ICO Extention Done");
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Specify the path to the text file
-                string filePath = textBox1.Text;
-
-                // Read the word to search from the TextBox
-                string searchWord = textBox2.Text;
-
-                // Create a StreamReader object to read the file
-                using (StreamReader reader = new StreamReader(filePath))
-                {
-                    string line;
-                    int count = 0;
-
-                    // Read lines from the file and check for the search word
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        // Perform case-insensitive search
-                        int occurrences = new Regex(Regex.Escape(searchWord), RegexOptions.IgnoreCase).Matches(line).Count;
-                        richTextBox1.AppendText($"{line}{Environment.NewLine}");
 
 
-                        count += occurrences;
-                    }
 
-                    // Display the count of occurrences to the user
-                    // MessageBox.Show("The word '" + searchWord + "' appears " + count + " times in the file.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    richTextBox1.AppendText($"The word  {searchWord} appears  {count}  times in the file., Search Result{Environment.NewLine}");
 
-                }
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show("An error occurred while reading the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         public async Task<string> GetBinancePrice(string symbol)
         {
             try
@@ -161,11 +106,6 @@ namespace ArsClientII
             }
         }
 
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            //DiskPartManager(textBox1.Text, textBox2.Text);
-        }
 
 
         private async Task<List<string>> GetH3Headers(string url)
@@ -261,7 +201,7 @@ namespace ArsClientII
         }
         private async void tabPage3_Click(object sender, EventArgs e)
         {
-            string mainText = "Voice Command Activated . . .";
+            string mainText = "Voice Command Activated";
             label7.Text = mainText;
             ReadText($"Voice Command Activated . I am  listening . Today Is:  {DateTime.Now.Date} ");
 
@@ -948,16 +888,109 @@ namespace ArsClientII
         {
             // ReadText($"warning . this application is for private use by Armin , under test and furthur develop. please do your research befor use . and read how this application  works , if you are not my owner . Please do not forget 3 things ,number 1: Risk Management .number 2:Stop Loss and Take Profit.number 3:Love Peace Freedom");
 
-            // var x=  await _okexApiClient.GetAssetsAsync();
-          
-            var x = await _okexApiClient.GetAllAssetsAsync();
+            var GetTottalBalance = await _okexApiClient.GetTottalBalance();
+            label6.Text = GetTottalBalance.ToString();
 
-            foreach(var xx in x)
+            List<OkexAsset> assets = await _okexApiClient.GetAllAssetsAsync();
+
+            // Clear the previous labels in the FlowLayoutPanel (if any)
+            /* flowLayoutPanel1.Controls.Clear();
+             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+             flowLayoutPanel1.WrapContents = true;
+             flowLayoutPanel1.AutoScroll = true;
+             flowLayoutPanel1.AutoSize = true;*/
+
+            // Clear the previous controls in TableLayoutPanel (if any)
+            groupBox3.Controls.Clear();
+
+            int yOffset = 30; // Vertical offset for positioning labels
+
+            foreach (var asset in assets)
             {
-                richTextBox1.AppendText(xx.Ccy);
-                richTextBox1.AppendText(xx.AvailEq);
+                // Create a combined label for each asset dynamically
+                var assetLabel = new Label
+                {
+                    Text = $"{asset.Ccy}                   {asset.AvailEq}", // Combine asset amount and currency
+                    AutoSize = true,
+                    Margin = new Padding(10, 30, 0, 0) // Adjust the margin as needed
+                };
+
+                // Add the label to the GroupBox3
+                groupBox3.Controls.Add(assetLabel);
+
+                // Set the location for the label based on the yOffset
+                assetLabel.Location = new Point(10, yOffset);
+
+                // Update yOffset for the next label
+                yOffset += assetLabel.Height + 5;
             }
         }
+
+
+
+
+
+
+
+        /*
+        if (assets.Count > 0)
+        {
+            var firstAsset = assets[0];
+            label11.Text = $"CCY: {firstAsset.Ccy}";
+            label12.Text = $"Available Equity: {firstAsset.AvailEq}";
+            var SecondAss = assets[1];
+            label13.Text = $"CCY: {SecondAss.Ccy}";
+            label14.Text = $"Available Equity: {SecondAss.AvailEq}";
+            //TODO dynamic list here label
+            var ThrdAss = assets[2];
+            label18.Text = $"CCY: {ThrdAss.Ccy}";
+            label23.Text = $"Available Equity: {ThrdAss.AvailEq}";
+
+            var FourthAss = assets[3];
+            label26.Text = $"CCY: {FourthAss.Ccy}";
+            label27.Text = $"Available Equity: {FourthAss.AvailEq}";
+
+            var FifTHAss = assets[4];
+            label28.Text = $"CCY: {FifTHAss.Ccy}";
+            label29.Text = $"Available Equity: {FifTHAss.AvailEq}";
+
+            var SixThAss = assets[5];
+            label24.Text = $"CCY: {SixThAss.Ccy}";
+            label25.Text = $"Available Equity: {SixThAss.AvailEq}";
+
+        }
+        else
+        {
+
+        }
+
+
+        foreach (var xx in x)
+        {
+            label11.Text = xx.Ccy;
+            label12.Text = xx.AvailEq;
+
+            label13.Text = xx.Ccy;
+            label14.Text = xx.AvailEq;
+
+            label18.Text = xx.Ccy;
+            label23.Text = xx.AvailEq;
+
+            label24.Text = xx.Ccy;
+            label25.Text = xx.AvailEq;
+
+            label26.Text = xx.Ccy;
+            label27.Text = xx.AvailEq;
+
+            label28.Text = xx.Ccy;
+            label29.Text = xx.AvailEq;
+        }*/
+        /*
+        foreach (var asset in assets)
+        {
+            richTextBox1.AppendText($"{asset.Ccy}: {asset.AvailEq}");
+        }*/
+
 
 
 
@@ -1021,6 +1054,26 @@ namespace ArsClientII
         }
 
         private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
         {
 
         }

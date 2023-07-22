@@ -160,38 +160,42 @@ public class OkexApiClient
         // Return 0 if the currency is not found in the response.
         return 0;
     }
-    /*
-    public async Task<List<OkexAsset>> GetAssetsAsync()
+    public async Task<decimal> GetTottalBalance()
     {
         try
         {
-            // var endpoint = "/api/v5/trade/order";
-            // var requestBody = $"{{ \"instId\": \"{symbol}\", \"tdMode\": \"cash\", \"side\": \"buy\", \"ordType\": \"market\", \"sz\": \"{quantity}\" }}";
             var endpoint = "/api/v5/account/balance";
 
-        var response = await _httpClient.GetAsync($"{BaseUrl}{endpoint}");
-        response.EnsureSuccessStatusCode();
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-KEY", ApiKey);
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-SIGN", GenerateSignature("GET", endpoint));
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-TIMESTAMP", _timestamp);
+            _httpClient.DefaultRequestHeaders.Add("OK-ACCESS-PASSPHRASE", "Papa-557");
+
+            var response = await _httpClient.GetAsync($"{BaseUrl}{endpoint}");
+            response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            var apiResponse = JsonConvert.DeserializeObject<OkexApiResponse>(responseContent);
+            DataObject dataObject = JsonConvert.DeserializeObject<DataObject>(responseContent);
 
-            if (apiResponse.Success)
-                return apiResponse.Data;
-            else
-                throw new Exception("OKEx API request was not successful.");
+            decimal totalBalance = 0;
+
+            foreach (var detail in dataObject.Data[0].Details)
+            {
+                if (decimal.TryParse(detail.AvailEq, out decimal availEq))
+                {
+                    totalBalance += availEq;
+                }
+            }
+
+            return totalBalance;
         }
         catch (Exception ex)
         {
-            // Handle any exceptions that may occur during the API request.
-            throw new Exception("Error retrieving OKEx assets: " + ex.Message);
+            throw new Exception("Error retrieving total balance: " + ex.Message);
         }
-
-
-
-
-
     }
-    */
+
     public class OkexAsset2
     {
         public string Currency { get; set; }
