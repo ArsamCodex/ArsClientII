@@ -53,6 +53,8 @@
             groupBox2 = new GroupBox();
             sqlCommand1 = new Microsoft.Data.SqlClient.SqlCommand();
             groupBox3 = new GroupBox();
+            label1 = new Label();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             tabPage3.SuspendLayout();
             tabControl1.SuspendLayout();
@@ -130,7 +132,7 @@
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(143, 85);
+            tabPage3.Size = new Size(143, 203);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Vocie";
             tabPage3.UseVisualStyleBackColor = true;
@@ -170,7 +172,7 @@
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(151, 113);
+            tabControl1.Size = new Size(151, 231);
             tabControl1.TabIndex = 4;
             // 
             // label3
@@ -221,6 +223,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(label19);
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(label21);
@@ -285,6 +289,25 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "groupBox3";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(10, 194);
+            label1.Name = "label1";
+            label1.Size = new Size(78, 15);
+            label1.TabIndex = 20;
+            label1.Text = "MA(100Daily)";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(144, 194);
+            label2.Name = "label2";
+            label2.Size = new Size(37, 15);
+            label2.TabIndex = 21;
+            label2.Text = "          ";
+            label2.Click += label2_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -338,5 +361,7 @@
         private GroupBox groupBox2;
         private Microsoft.Data.SqlClient.SqlCommand sqlCommand1;
         private GroupBox groupBox3;
+        private Label label2;
+        private Label label1;
     }
 }

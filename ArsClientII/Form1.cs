@@ -393,7 +393,7 @@ namespace ArsClientII
   "track 1", "50", "Tatal", "you are my lovely client", "thanks", "fifty", "number fifty",
   "hey shadow i introduce you my guest", "guest", "hey this is stranger", "stranger", "this is my guest", "shadow", "hey shadow",
   "thank you", "goriz", "coingraph", "CryptoNews", "naaz", "Tupac", "crypto daily", "number 6", "pac",
-  "tupac", "Tupac", "Pocheel", "number 4", "number 7", "Tomeh", "vay", "Amir");
+  "tupac", "Tupac", "Pocheel", "number 4", "number 7", "Tomeh", "vay", "Amir", "105", "115", "160");
 
 
             // Create a grammar from the choices
@@ -539,52 +539,38 @@ namespace ArsClientII
                             richTextBox1.Clear();
                             ReadText("Information logger is cleared stay standby");
                         }
-                        if (e.Result.Text.ToLower() == "100")
+                        if (e.Result.Text.ToLower() == "105")
                         {
-                            /*
-                            var Finalmoving = await CalculateMovingAverage(apiUrl);
-                            var xx = Finalmoving;
-                            var lllast = Math.Round(xx);
 
-                            richTextBox1.AppendText($" Movig Avegarge 100 Days Informtion : {Environment.NewLine}");
-
-                            //  string apiUrl = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=100";
-                            int timeIntervalInMinutes = 15;
-                            decimal movingAverage = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes);
-                            richTextBox1.AppendText($" Moving Average 100 Time Frame 15 Minutes {movingAverage.ToString("F3")} {Environment.NewLine}");
-                            label22.Text = movingAverage.ToString("F3");
-
-
-
-                            int timeIntervalInMinutes5 = 5;
-                            decimal movingAverage5 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes5);
+                            decimal movingAverage5 = await _traderMethodHelper.Get1005Min();
                             richTextBox1.AppendText($" Moving Average 100 Time Frame 5 Minutes {movingAverage5.ToString("F3")} {Environment.NewLine}");
                             label21.Text = movingAverage5.ToString("F3");
-                         
+                            ReadText($"Moving Average 100 days 5 minutes is {movingAverage5.ToString("F3")},Moving Average 100 days 5 minutes is {movingAverage5.ToString("F3")}");
+                        }
 
+                        if (e.Result.Text.ToLower() == "115")
+                        {
 
-                            int timeIntervalInMinutes60 = 60;
-                            decimal movingAverage60 = await CalculateMovingAverage(apiUrl, timeIntervalInMinutes60);
-                            richTextBox1.AppendText($" Moving Average 100 Time Frame 1 Hour {movingAverage60.ToString("F3")} {Environment.NewLine}");
-                            label3.Text = movingAverage60.ToString("F3");
+                            decimal movingAverage115 = await _traderMethodHelper.Get10015Min();
+                            richTextBox1.AppendText($" Moving Average 100 Time Frame 15 Minutes {movingAverage115.ToString("F3")} {Environment.NewLine}");
+                            label22.Text = movingAverage115.ToString("F3");
+                            ReadText($"Moving Average 100 days 15 minutes is {movingAverage115.ToString("F3")},Moving Average 100 days 15 minutes is {movingAverage115.ToString("F3")}");
+                        }
+                        if (e.Result.Text.ToLower() == "160")
+                        {
 
+                            decimal movingAverage160 = await _traderMethodHelper.Get10060Min();
+                            richTextBox1.AppendText($" Moving Average 100 Time Frame 60 Minutes {movingAverage160.ToString("F3")} {Environment.NewLine}");
+                            label3.Text = movingAverage160.ToString("F3");
+                            ReadText($"Moving Average 100 days 60 minutes is {movingAverage160.ToString("F3")}");
+                        }
+                        if (e.Result.Text.ToLower() == "1440")
+                        {
 
-                            string apiUrl200 = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
-                            int timeIntervalInMinutes2005 = 5;
-                            decimal movingAverage2005 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes2005);
-
-                            label9.Text = movingAverage2005.ToString("F3");
-                            richTextBox1.AppendText($" Movig Avegarge 200 Days Time Frame 5 Minutes : {movingAverage2005.ToString("F3")}{Environment.NewLine}");
-
-
-
-                           
-                            int timeIntervalInMinutes20015 = 15;
-                            decimal movingAverage20015 = await CalculateMovingAverage(apiUrl200, timeIntervalInMinutes20015);
-                            richTextBox1.AppendText($" Moving Average 200 Time Frame 15 Minutes {movingAverage20015.ToString("F3")} {Environment.NewLine}");
-                            label5.Text = movingAverage20015.ToString("F3");
-                            */
-                            //ReadText($"Moving Average 100 days 5 minutes is {movingAverage5.ToString("F3")},Moving Average 100 days 15 minutes is {movingAverage.ToString("F3")},Moving Average 100 days 1 Hour is {movingAverage60.ToString("F3")},Moving Average 200 days 5 Hour is {movingAverage2005.ToString("F3")},Moving Average 200 days 15 Hour is {movingAverage20015.ToString("F3")}");
+                            decimal movingAverage100Daily = await _traderMethodHelper.Get10060Min();
+                            richTextBox1.AppendText($" Moving Average 100 Time Frame 1440 Minutes {movingAverage100Daily.ToString("F3")} {Environment.NewLine}");
+                            label2.Text = movingAverage100Daily.ToString("F3");
+                            ReadText($"Moving Average 100 days 1440 minutes is {movingAverage100Daily.ToString("F3")}");
                         }
                         if (e.Result.Text.ToLower() == "number 2")
                         {
@@ -600,6 +586,7 @@ namespace ArsClientII
                             newData.Price = xx;
                             newData.MovingAverage100 = 0.2614;
                             PriceHelper = xx;
+                            //TODO dispose make seperate context here 
                             _context.CoinAnalysis.Add(newData);
                             _context.SaveChanges();
                             _context.Dispose();
@@ -893,13 +880,6 @@ namespace ArsClientII
 
             List<OkexAsset> assets = await _okexApiClient.GetAllAssetsAsync();
 
-            // Clear the previous labels in the FlowLayoutPanel (if any)
-            /* flowLayoutPanel1.Controls.Clear();
-             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-             flowLayoutPanel1.WrapContents = true;
-             flowLayoutPanel1.AutoScroll = true;
-             flowLayoutPanel1.AutoSize = true;*/
-
             // Clear the previous controls in TableLayoutPanel (if any)
             groupBox3.Controls.Clear();
 
@@ -910,7 +890,7 @@ namespace ArsClientII
                 // Create a combined label for each asset dynamically
                 var assetLabel = new Label
                 {
-                    Text = $"{asset.Ccy}                   {asset.AvailEq}", // Combine asset amount and currency
+                    Text = $"{asset.Ccy}                  {asset.AvailEq}", // Combine asset amount and currency
                     AutoSize = true,
                     Margin = new Padding(10, 30, 0, 0) // Adjust the margin as needed
                 };
@@ -924,6 +904,7 @@ namespace ArsClientII
                 // Update yOffset for the next label
                 yOffset += assetLabel.Height + 5;
             }
+
         }
 
 
@@ -1074,6 +1055,11 @@ namespace ArsClientII
         }
 
         private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }
